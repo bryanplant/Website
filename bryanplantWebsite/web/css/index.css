@@ -9,3 +9,12 @@ html, body{
     margin: 0;
     padding: 0;
 }
+
+#canvas{
+    border: solid black thin;
+}
+
+#spaceImg{
+    object-fit: cover;
+    overflow: hidden;
+}
