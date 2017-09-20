@@ -1,15 +1,19 @@
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
-import 'dart/Star.dart';
 import 'dart:collection';
+
+import 'dart/Star.dart';
 
 Random rand = new Random();
 CanvasElement canvas = querySelector("#canvas");
 CanvasRenderingContext2D c2d = canvas.getContext('2d');
-Queue stars = new Queue();
-int maxStars = 20;
 String backgroundColor = '#091223';
+
+Queue stars = new Queue();
+int maxStars = 25;
+Duration newStarTimer = new Duration(milliseconds: 200);
+DateTime lastTime = new DateTime.now();
 
 void drawScreen() {
   c2d.fillStyle = backgroundColor;
@@ -36,14 +40,25 @@ void main() {
     }
   });
 
+  for(int i = 0; i < maxStars; i++){
+    newStar(false);
+  }
 
-
-  const newStarTime = const Duration(milliseconds:200);
-
-  new Timer.periodic(newStarTime, (Timer t) => newStar());
+  new Timer.periodic(new Duration(milliseconds: 17), (Timer t) => update());
+  ;
 }
 
-void newStar(){
+void update(){
+  if(new DateTime.now().difference(lastTime) > newStarTimer) {
+    newStar(true);
+    lastTime = new DateTime.now();
+  }
+
+  if(stars.length > maxStars)
+    stars.removeLast().fadeOut(c2d, backgroundColor);
+}
+
+void newStar(bool fade){
   int width = rand.nextInt(50) + 20;
 
   int x, y;
@@ -68,59 +83,9 @@ void newStar(){
   int b = rand.nextInt(255);
   Star star = new Star(x, y, width, r, g, b);
   stars.addFirst(star);
-  fadeStarIn(star);
-
-  if(stars.length > maxStars)
-    fadeStarOut();
+  if(fade)
+    star.fadeIn(c2d);
+  else
+    star.draw(c2d);
 }
-
-void deleteStar(){
-  Star star = stars.removeLast();
-  c2d.fillStyle = backgroundColor;
-  c2d.fillRect(star.x-star.width/2, star.y-star.width/2, star.width, star.width);
-}
-
-void fadeStarIn(Star star){
-  star.alpha = .05;
-  star.draw(c2d);
-
-  new Timer(new Duration(milliseconds: 75), () {
-    star.alpha = .1;
-    star.draw(c2d);
-  });
-  new Timer(new Duration(milliseconds: 150), () {
-    star.alpha = .2;
-    star.draw(c2d);
-  });
-  new Timer(new Duration(milliseconds: 225), () {
-    star.alpha = 1.0;
-    star.draw(c2d);
-  });
-}
-
-void fadeStarOut(){
-  Star star = stars.removeLast();
-  c2d.fillStyle = backgroundColor;
-  c2d.fillRect(star.x-star.width/2, star.y-star.width/2, star.width, star.width);
-  star.alpha = .2;
-  star.draw(c2d);
-  new Timer(new Duration(milliseconds: 75), () {
-    c2d.fillStyle = backgroundColor;
-    c2d.fillRect(star.x-star.width/2, star.y-star.width/2, star.width, star.width);
-    star.alpha = .1;
-    star.draw(c2d);
-  });
-  new Timer(new Duration(milliseconds: 150), () {
-    c2d.fillStyle = backgroundColor;
-    c2d.fillRect(star.x-star.width/2, star.y-star.width/2, star.width, star.width);
-    star.alpha = .05;
-    star.draw(c2d);
-  });
-  new Timer(new Duration(milliseconds: 225), () {
-    c2d.fillStyle = backgroundColor;
-    c2d.fillRect(star.x-star.width/2, star.y-star.width/2, star.width, star.width);
-  });
-}
-
-
 
