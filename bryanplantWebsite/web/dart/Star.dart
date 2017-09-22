@@ -12,14 +12,14 @@ class Star{
   int fadeOutStep = 0;
   int fadeInStep = 0;
 
-  Star(int x, int y, int width, int r, int g, int b, double alpha){
+  Star(int x, int y, int width, int r, int g, int b){
     this.x = x;
     this.y = y;
     this.width = width;
     this.r = r;
     this.g = g;
     this.b = b;
-    this.alpha = alpha;
+    this.alpha = 1.0;
   }
 
   void update(){
@@ -38,14 +38,12 @@ class Star{
           alpha = .3;
           break;
         case 9:
-          alpha = 1.0;
           fadingIn = false;
           break;
       }
       fadeInStep++;
     }
-
-    if(fadingOut){
+    else if(fadingOut){
       switch(fadeOutStep){
         case 0:
           alpha = .3;
@@ -65,6 +63,11 @@ class Star{
           break;
       }
       fadeOutStep++;
+    }
+    else{
+      alpha = 1.0/(40/width)+.25;
+      if(alpha > 1.0)
+        alpha = 1.0;
     }
   }
 
