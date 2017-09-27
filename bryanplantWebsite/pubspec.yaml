@@ -4,3 +4,4 @@ description: My project.
 dependencies:
   path: any
   browser: any
+  vector_math: any
