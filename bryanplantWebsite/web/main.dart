@@ -1,4 +1,5 @@
 import 'dart/Rocket.dart';
+import 'dart/RocketDNA.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
@@ -23,12 +24,14 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-List<Rocket> rockets = new List<Rocket>(30);    //contains rocket objects
+int numRockets = 20;
+List<Rocket> rockets = new List<Rocket>(numRockets);    //contains rocket objects
 
 int targetRadius = 25;  //radius of target
 Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of target
 
-double mostFit = 0.0; //contains fitness for best rocket
+double maxFit = 0.0; //contains fitness for best rocket
+double averageFit = 0.0;
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
@@ -48,7 +51,7 @@ void main() {
 
   //create first generation of rockets
   for(int i = 0; i < rockets.length; i++){
-    rockets[i] = new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble());
+    rockets[i] = new Rocket.randDNA(window.innerWidth / 2, window.innerHeight - 50.toDouble());
   }
 
   //update and draw approximately 60 times per second
@@ -123,13 +126,35 @@ void update() {
 }
 
 void createNewGeneration(){
-    mostFit = 0.0;
-    for (int i = 0; i < rockets.length; i ++) {
+    //find the max fitness value
+    maxFit = 0.0;
+    double totalFit = 0.0;
+    for(int i = 0; i < numRockets; i++) {
       rockets[i].calculateFitness(target);
-      if(rockets[i].fitness > mostFit)
-        mostFit = rockets[i].fitness;
-      rockets[i] = new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble());
+      totalFit += rockets[i].fitness;
+      if(rockets[i].fitness > maxFit)
+        maxFit = rockets[i].fitness;
     }
+    averageFit = totalFit/numRockets;
+
+    //add each rockets DNA to the genePool a certain number of times
+    //depending on each rocket's fitness
+    List<RocketDNA> genePool = new List();
+    for(int i = 0; i < numRockets; i++) {
+      double modifiedFitness = rockets[i].fitness / maxFit;
+      for(int j = 0; j < modifiedFitness*100; j++){
+        genePool.add(rockets[i].dna);
+      }
+    }
+
+    for(int i = 0; i < numRockets; i++) {
+      RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
+      RocketDNA dna2 = genePool[rand.nextInt(genePool.length)];
+      RocketDNA newDNA = dna1.splice(dna2);
+      newDNA.mutate();
+      rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
+    }
+    print(rockets.length);
 }
 
 //draw everything to the canvas
@@ -168,7 +193,12 @@ void draw(){
   c2d.font = "12px sans-serif";
   c2d.fillStyle = 'white';
   c2d.textAlign = 'left';
-  c2d.fillText("Max Fitness of Generation: " + mostFit.toStringAsFixed(4), 20, window.innerHeight-20);
+  c2d.fillText("Average Fitness of Generation: " + averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
+
+  c2d.font = "12px sans-serif";
+  c2d.fillStyle = 'white';
+  c2d.textAlign = 'left';
+  c2d.fillText("Max Fitness of Generation:         " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
 
   c2d.font = "48px sans-serif";
   c2d.textAlign = 'center';

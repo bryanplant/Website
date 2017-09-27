@@ -16,14 +16,25 @@ class Rocket{
   double fitness; //rocket's fitness
 
   //create new rocket
-  Rocket(double x, double y){
+  Rocket.randDNA(double x, double y){
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
     grav = new Vector2(0.0, 0.005);
     width = 15;
     height = 40;
-    dna = new RocketDNA(numGenes);
+    dna = new RocketDNA.giveNum(numGenes);
+  }
+
+  Rocket.givenDNA(double x, double y, RocketDNA dna){
+    pos = new Vector2(x, y);
+    vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
+    acc = new Vector2(0.0, 0.0);
+    grav = new Vector2(0.0, 0.005);
+    width = 15;
+    height = 40;
+    this.dna = dna;
+    print(this.dna);
   }
 
   //calculate rocket's fitness based on distance to target
