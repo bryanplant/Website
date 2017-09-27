@@ -1,3 +1,5 @@
 bryanplantWebsite/.idea
 bryanplantWebsite/build
 bryanplantWebsite/.pub
+bryanplantWebsite/.packages
+bryanplantWebsite/pubspec.lock
