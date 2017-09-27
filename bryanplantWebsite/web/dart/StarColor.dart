@@ -1,4 +1,4 @@
-
+//contains information about color of a star
 class StarColor{
   int r, g, b;
 

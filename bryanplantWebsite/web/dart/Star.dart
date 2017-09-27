@@ -1,17 +1,18 @@
 import 'dart:html';
 
 class Star{
-  int x;
-  int y;
-  int width;
-  int r, g, b;
-  double alpha;
-  bool fadingOut = false;
-  bool fadingIn = false;
-  bool faded = false;
-  int fadeOutStep = 0;
-  int fadeInStep = 0;
+  int x; //x-coord of star
+  int y; //y-coord of star
+  int width; //width of star
+  int r, g, b; //red, green and blue color values
+  double alpha; //alpha of color
+  bool fadingOut = false; //if star is fading out
+  bool fadingIn = false;  //if star is fading in
+  bool faded = false;     //if the star is faded
+  int fadeOutStep = 0;    //what step of fading out the star is on
+  int fadeInStep = 0;     //what step of fading in the star is on
 
+  //creates a new star
   Star(int x, int y, int width, int r, int g, int b){
     this.x = x;
     this.y = y;
@@ -22,8 +23,9 @@ class Star{
     this.alpha = 1.0;
   }
 
+  //update star
   void update(){
-    if(fadingIn){
+    if(fadingIn){   //if star is fading in slowly increase alpha value
       switch(fadeInStep){
         case 0:
           alpha = .05;
@@ -43,7 +45,7 @@ class Star{
       }
       fadeInStep++;
     }
-    else if(fadingOut){
+    else if(fadingOut){ //if star is fading out slowly decrease alpha value
       switch(fadeOutStep){
         case 0:
           alpha = .3;
@@ -64,13 +66,14 @@ class Star{
       }
       fadeOutStep++;
     }
-    else{
+    else{ //otherwise set the alpha value corresponding to the width of the star
       alpha = 1.0/(40/width)+.25;
       if(alpha > 1.0)
         alpha = 1.0;
     }
   }
 
+  //draw the star to the canvas
   void draw(CanvasRenderingContext2D c2d){
     c2d.fillStyle = 'rgba($r, $g, $b, $alpha)';
     c2d.beginPath();
