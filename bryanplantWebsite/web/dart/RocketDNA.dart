@@ -21,7 +21,7 @@ class RocketDNA{
   }
 
   RocketDNA splice(RocketDNA that){
-    int center = rand.nextInt(this.genes.length);
+    int center = rand.nextInt((this.genes.length/2).toInt()) + this.genes.length;
     List<Vector2> newGenes = new List(this.genes.length);
     for(int i = 0; i < this.genes.length; i++){
       if(i < center)
@@ -34,8 +34,10 @@ class RocketDNA{
 
   void mutate(){
     for(int i = 0; i < this.genes.length; i++){
-      if(rand.nextInt(50) == 0){
-        this.genes[i] = new Vector2(((rand.nextDouble()*2)-1)/10, ((rand.nextDouble()*2)-1)/10);
+      if(rand.nextInt((this.genes.length/2).toInt()) == 0){
+        //int numMutatedGenes = rand.nextInt(2) + 1;
+          this.genes[i] = new Vector2(((rand.nextDouble() * 2) - 1) / 10,
+              ((rand.nextDouble() * 2) - 1) / 10);
       }
     }
   }

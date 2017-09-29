@@ -24,7 +24,7 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-int numRockets = 20;
+int numRockets = 40;
 List<Rocket> rockets = new List<Rocket>(numRockets);    //contains rocket objects
 
 int targetRadius = 25;  //radius of target
@@ -32,6 +32,8 @@ Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of ta
 
 double maxFit = 0.0; //contains fitness for best rocket
 double averageFit = 0.0;
+
+Rectangle obstacle = new Rectangle(window.innerWidth/3, (2*window.innerHeight)/5, window.innerWidth/3, 50);
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
@@ -117,7 +119,7 @@ void update() {
 
   //update rocket
   for(Rocket r in rockets) {
-    r.update();
+    r.update(target, targetRadius, obstacle);
   }
 
   //create new generation if rockets are out of genes
@@ -141,11 +143,12 @@ void createNewGeneration(){
     //depending on each rocket's fitness
     List<RocketDNA> genePool = new List();
     for(int i = 0; i < numRockets; i++) {
-      double modifiedFitness = rockets[i].fitness / maxFit;
-      for(int j = 0; j < modifiedFitness*100; j++){
+      print(rockets[i].fitness);
+      for(int j = 0; j < rockets[i].fitness*100; j++){
         genePool.add(rockets[i].dna);
       }
     }
+    print("");
 
     for(int i = 0; i < numRockets; i++) {
       RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
@@ -154,7 +157,6 @@ void createNewGeneration(){
       newDNA.mutate();
       rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
     }
-    print(rockets.length);
 }
 
 //draw everything to the canvas
@@ -164,9 +166,6 @@ void draw(){
     s.draw(c2d);
   }
 
-  for(Rocket r in rockets) { //draw rockets to canvas
-    r.draw(c2d);
-  }
 
   //draw target
   c2d.fillStyle = 'red';
@@ -184,6 +183,13 @@ void draw(){
   c2d.arc(target.x, target.y, targetRadius/4, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
+
+  for(Rocket r in rockets) { //draw rockets to canvas
+    r.draw(c2d);
+  }
+
+  c2d.fillStyle = 'white';
+  c2d.fillRect(obstacle.left, obstacle.top, obstacle.width, obstacle.height);
 
   c2d.font = "14px sans-serif";
   c2d.textAlign = 'center';

@@ -9,11 +9,14 @@ class Rocket{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 90;   //how many genes in DNA
+  int numGenes = 125;   //how many genes in DNA
   int nextGene = 0;    //what the next gene is
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
   RocketDNA dna;  //DNA of rocket
   double fitness; //rocket's fitness
+  bool completed = false;
+  bool crashed = false;
+  int completedTime;
 
   //create new rocket
   Rocket.randDNA(double x, double y){
@@ -34,25 +37,54 @@ class Rocket{
     width = 15;
     height = 40;
     this.dna = dna;
-    print(this.dna);
   }
 
   //calculate rocket's fitness based on distance to target
   void calculateFitness(Vector2 target){
     double dist = pos.distanceTo(target);
-    this.fitness = 1/dist;
+    if(dist == 0){
+      this.fitness = 1.0;
+    }
+    else {
+      this.fitness = 1 / (dist/10);
+    }
+    if(completed){
+      fitness += (numGenes/2)/completedTime;
+    }
+    if(crashed){
+      fitness /= 10;
+    }
   }
 
   //update rocket
-  void update(){
-    acc.setFrom(dna.genes.elementAt(nextGene)); //set acceleration based on gene
-    acc.add(grav);  //add gravity to acceleration vector
-    vel.add(acc);   //add acceleration to velocity vector
-    if(vel.length > 4)
-      vel = vel.normalized()*4.0; //max velocity of rocket
-    pos.add(vel); //add velocity to position vector
+  void update(Vector2 target, int targetRadius, Rectangle obstacle){
+    if(!completed && pos.distanceTo(target) < targetRadius){
+      completed = true;
+      completedTime = nextGene;
+      pos = target.clone();
+    }
+
+    Point point = new Point(pos.x, pos.y);
+
+    if(obstacle.containsPoint(point)){
+      crashed = true;
+    }
+
+    if(!completed && !crashed) {
+      acc.setFrom(
+          dna.genes.elementAt(nextGene)); //set acceleration based on gene
+      acc.add(grav); //add gravity to acceleration vector
+      vel.add(acc); //add acceleration to velocity vector
+      if (vel.length > 4)
+        vel = vel.normalized() * 4.0; //max velocity of rocket
+      pos.add(vel); //add velocity to position vector
+    }
+
+
+
+
     nextGeneCounter++;
-    if(nextGeneCounter >= 5) {  //move to next gene
+    if (nextGeneCounter >= 5) { //move to next gene
       if (nextGene < dna.genes.length - 1)
         nextGene++;
       nextGeneCounter = 0;
