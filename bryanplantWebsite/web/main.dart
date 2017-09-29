@@ -24,7 +24,7 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-int numRockets = 40;
+int numRockets = 100;
 List<Rocket> rockets = new List<Rocket>(numRockets);    //contains rocket objects
 
 int targetRadius = 25;  //radius of target
@@ -33,11 +33,13 @@ Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of ta
 double maxFit = 0.0; //contains fitness for best rocket
 double averageFit = 0.0;
 
-Rectangle obstacle = new Rectangle(window.innerWidth/3, (2*window.innerHeight)/5, window.innerWidth/3, 50);
+Rectangle obstacle = new Rectangle(window.innerWidth/4, (2*window.innerHeight)/5, window.innerWidth/2, 50);
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
   canvas.height = window.innerHeight; //set height to height of browser window
+
+
 
   //resize canvas and update target position when the browser window is resized
   window.onResize.listen((e) {
@@ -118,8 +120,16 @@ void update() {
   }
 
   //update rocket
+  bool allDone = true;
   for(Rocket r in rockets) {
     r.update(target, targetRadius, obstacle);
+    if (!r.crashed && !r.completed){
+       allDone = false;
+    }
+  }
+
+  if(allDone){
+    createNewGeneration();
   }
 
   //create new generation if rockets are out of genes
@@ -152,8 +162,11 @@ void createNewGeneration(){
 
     for(int i = 0; i < numRockets; i++) {
       RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
-      RocketDNA dna2 = genePool[rand.nextInt(genePool.length)];
-      RocketDNA newDNA = dna1.splice(dna2);
+      RocketDNA dna2 = dna1;
+      while(dna2.genes == dna1.genes) {
+        dna2 = genePool[rand.nextInt(genePool.length)];
+      }
+      RocketDNA newDNA = dna1.crossover(dna2);
       newDNA.mutate();
       rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
     }
@@ -166,21 +179,20 @@ void draw(){
     s.draw(c2d);
   }
 
-
   //draw target
   c2d.fillStyle = 'red';
   c2d.beginPath();
-  c2d.arc(target.x, target.y, targetRadius, 0, 2 * PI);
+  c2d.arc(target.x, target.y+targetRadius, targetRadius, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
   c2d.fillStyle = 'white';
   c2d.beginPath();
-  c2d.arc(target.x, target.y, targetRadius/1.5, 0, 2 * PI);
+  c2d.arc(target.x, target.y+targetRadius, targetRadius/1.5, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
   c2d.fillStyle = 'red';
   c2d.beginPath();
-  c2d.arc(target.x, target.y, targetRadius/4, 0, 2 * PI);
+  c2d.arc(target.x, target.y+targetRadius, targetRadius/4, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
 
@@ -194,7 +206,7 @@ void draw(){
   c2d.font = "14px sans-serif";
   c2d.textAlign = 'center';
   c2d.fillStyle = 'white';
-  c2d.fillText("Target", window.innerWidth/2, 20);
+  c2d.fillText("Target", window.innerWidth/2, 40);
 
   c2d.font = "12px sans-serif";
   c2d.fillStyle = 'white';

@@ -23,7 +23,7 @@ class Rocket{
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
-    grav = new Vector2(0.0, 0.005);
+    grav = new Vector2(0.0, 0.05);
     width = 15;
     height = 40;
     dna = new RocketDNA.giveNum(numGenes);
@@ -43,13 +43,13 @@ class Rocket{
   void calculateFitness(Vector2 target){
     double dist = pos.distanceTo(target);
     if(dist == 0){
-      this.fitness = 1.0;
+      this.fitness = 50.0;
     }
     else {
-      this.fitness = 1 / (dist/10);
+      this.fitness = 50 / (dist/(window.innerWidth/100));
     }
     if(completed){
-      fitness += (numGenes/2)/completedTime;
+      fitness += (numGenes/completedTime)*20;
     }
     if(crashed){
       fitness /= 10;
@@ -66,7 +66,7 @@ class Rocket{
 
     Point point = new Point(pos.x, pos.y);
 
-    if(obstacle.containsPoint(point)){
+    if(obstacle.containsPoint(point) || pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 || pos.x > window.innerWidth){
       crashed = true;
     }
 
@@ -84,7 +84,7 @@ class Rocket{
 
 
     nextGeneCounter++;
-    if (nextGeneCounter >= 5) { //move to next gene
+    if (nextGeneCounter >= 10) { //move to next gene
       if (nextGene < dna.genes.length - 1)
         nextGene++;
       nextGeneCounter = 0;
