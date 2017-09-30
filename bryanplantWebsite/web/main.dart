@@ -13,6 +13,7 @@ import 'dart/StarColor.dart';
 Random rand = new Random();
 CanvasElement canvas = querySelector("#canvas");        //HTML Canvas
 CanvasRenderingContext2D c2d = canvas.getContext('2d'); //CanvasRenderContext
+DivElement container = canvas.querySelector("#container");
 
 Queue stars = new Queue();  //contains star objects
 int maxStars = 20;          //max number of stars to be on screen
@@ -38,8 +39,6 @@ Rectangle obstacle = new Rectangle(window.innerWidth/4, (2*window.innerHeight)/5
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
   canvas.height = window.innerHeight; //set height to height of browser window
-
-
 
   //resize canvas and update target position when the browser window is resized
   window.onResize.listen((e) {
@@ -218,10 +217,10 @@ void draw(){
   c2d.textAlign = 'left';
   c2d.fillText("Max Fitness of Generation:         " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
 
-  c2d.font = "48px sans-serif";
+/*  c2d.font = "48px sans-serif";
   c2d.textAlign = 'center';
   c2d.fillStyle = 'white';
-  c2d.fillText("Bryan Plant", window.innerWidth/2, window.innerHeight/4);
+  c2d.fillText("Bryan Plant", window.innerWidth/2, window.innerHeight/4);*/
 }
 
 
