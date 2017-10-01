@@ -1,4 +1,4 @@
-html{
+html, body{
     margin:0;
     padding:0;
     width: 100%;
@@ -8,30 +8,29 @@ html{
 
 body{
     background: #E0A665;
-    background-image: -webkit-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-webkit-linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: -moz-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-moz-linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: -o-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-o-linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    overflow:hidden
+    background-image: -webkit-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-webkit-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -moz-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-moz-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -o-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-o-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
 }
 
-a:link{
-    font-family: sans-serif;
-    letter-spacing: 2pt;
-    font-size: 12pt;
-    text-decoration: none;
-    color:white;
-    border-right: 3px solid;
-    padding-right: 4px;
-    padding-left: 2px;
+#canvas{
+    margin:0;
+    padding:0;
+    position: absolute;
 }
 
-a:visited{
-    color:white;
+#container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
 }
 
-a:link.last{
-    border: none;
+#navigation{
+    top: 20%;
+    position: relative;
+    text-align: center;
+    width: 100%;
 }
 
 #name{
@@ -58,17 +57,21 @@ a:link.last{
     display: inline-block;
 }
 
-#container {
-    height: 100%;
-    position: relative;
-    width: 100%;
+a:link{
+    font-family: sans-serif;
+    letter-spacing: 2pt;
+    font-size: 12pt;
+    text-decoration: none;
+    color:white;
+    border-right: 3px solid;
+    padding-right: 4px;
+    padding-left: 2px;
 }
 
-#navigation{
-    bottom: 65%;
-    position: absolute;
-    text-align: center;
-    width: 100%;
-    display:inline-block;
+a:visited{
+    color:white;
 }
 
+a:link.last{
+    border: none;
+}
