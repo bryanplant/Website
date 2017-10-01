@@ -25,7 +25,7 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-int numRockets = 100;
+int numRockets = 40;
 List<Rocket> rockets = new List<Rocket>(numRockets);    //contains rocket objects
 
 int targetRadius = 25;  //radius of target
@@ -33,8 +33,6 @@ Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of ta
 
 double maxFit = 0.0; //contains fitness for best rocket
 double averageFit = 0.0;
-
-Rectangle obstacle = new Rectangle(window.innerWidth/4, (2*window.innerHeight)/5, window.innerWidth/2, 50);
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
@@ -121,7 +119,7 @@ void update() {
   //update rocket
   bool allDone = true;
   for(Rocket r in rockets) {
-    r.update(target, targetRadius, obstacle);
+    r.update(target, targetRadius);
     if (!r.crashed && !r.completed){
        allDone = false;
     }
@@ -198,9 +196,6 @@ void draw(){
   for(Rocket r in rockets) { //draw rockets to canvas
     r.draw(c2d);
   }
-
-  c2d.fillStyle = 'white';
-  c2d.fillRect(obstacle.left, obstacle.top, obstacle.width, obstacle.height);
 
   c2d.font = "14px sans-serif";
   c2d.textAlign = 'center';

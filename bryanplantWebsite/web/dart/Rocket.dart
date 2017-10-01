@@ -9,7 +9,7 @@ class Rocket{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 125;   //how many genes in DNA
+  int numGenes = 50;   //how many genes in DNA
   int nextGene = 0;    //what the next gene is
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
   RocketDNA dna;  //DNA of rocket
@@ -57,7 +57,7 @@ class Rocket{
   }
 
   //update rocket
-  void update(Vector2 target, int targetRadius, Rectangle obstacle){
+  void update(Vector2 target, int targetRadius){
     if(!completed && pos.distanceTo(target) < targetRadius){
       completed = true;
       completedTime = nextGene;
@@ -66,7 +66,7 @@ class Rocket{
 
     Point point = new Point(pos.x, pos.y);
 
-    if(obstacle.containsPoint(point) || pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 || pos.x > window.innerWidth){
+    if(pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 || pos.x > window.innerWidth){
       crashed = true;
     }
 
