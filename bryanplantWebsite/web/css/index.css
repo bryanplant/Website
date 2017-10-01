@@ -1,11 +1,18 @@
-* {
-    margin:0; padding:0;
-}
-
-html, body {
+html{
+    margin:0;
+    padding:0;
     width: 100%;
     height: 100%;
     overflow: hidden;
+}
+
+body{
+    background: #E0A665;
+    background-image: -webkit-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-webkit-linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -moz-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-moz-linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -o-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-o-linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),linear-gradient(135deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    overflow:hidden
 }
 
 a:link{
@@ -55,14 +62,6 @@ a:link.last{
     height: 100%;
     position: relative;
     width: 100%;
-}
-
-#canvas{
-    background: #E0A665;
-    background-image: -webkit-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-webkit-linear-gradient(280deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: -moz-radial-gradient(closest-corner, rgba(16,47,70,0) 60%, rgba(16,47,70,0.2)),-moz-linear-gradient(342deg, #efb676, #e0a681 10%, #0f1b58 90%);
-    background-image: -o-radial-gradient(closest-corner, rgba(16,47,70,0) 60%, rgba(16,47,70,0.2)),-o-linear-gradient(342deg, #efb676, #e0a681 10%, #0f1b58 90%);
-    background-image: radial-gradient(closest-corner, rgba(16,47,70,0) 60%, rgba(16,47,70,0.2)),-ms-linear-gradient(342deg, #efb676, #e0a681 10%, #0f1b58 90%);
 }
 
 #navigation{
