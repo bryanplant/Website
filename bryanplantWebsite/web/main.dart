@@ -167,8 +167,10 @@ void createNewGeneration(){
   }
   averageFit = totalFit/numRockets;
 
-  if(fastestRocket != -1)
-    rockets[fastestRocket].fitness += 20;
+  if(fastestRocket != -1) {
+    rockets[fastestRocket].fitness += 25;
+    print(rockets[fastestRocket].fitness);
+  }
 
   //add each rockets DNA to the genePool a certain number of times
   //depending on each rocket's fitness

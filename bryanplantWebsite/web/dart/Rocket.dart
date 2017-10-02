@@ -24,7 +24,7 @@ class Rocket{
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
-    grav = new Vector2(0.0, 0.05);
+    grav = new Vector2(0.0, 0.025);
     width = 15;
     height = 40;
     dna = new RocketDNA.giveNum(numGenes);
@@ -34,7 +34,7 @@ class Rocket{
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
-    grav = new Vector2(0.0, 0.005);
+    grav = new Vector2(0.0, 0.025);
     width = 15;
     height = 40;
     this.dna = dna;
@@ -80,12 +80,11 @@ class Rocket{
     }
 
     if(!completed && !crashed) {
-      acc.setFrom(
-          dna.genes.elementAt(nextGene)); //set acceleration based on gene
+      acc.setFrom(dna.genes.elementAt(nextGene)); //set acceleration based on gene
       acc.add(grav); //add gravity to acceleration vector
       vel.add(acc); //add acceleration to velocity vector
-      if (vel.length > 4)
-        vel = vel.normalized() * 4.0; //max velocity of rocket
+      if (vel.length > 5)
+        vel = vel.normalized() * 5.0; //max velocity of rocket
       pos.add(vel); //add velocity to position vector
     }
 
