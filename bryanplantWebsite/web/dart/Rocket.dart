@@ -9,39 +9,91 @@ class Rocket{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 90;   //how many genes in DNA
+  int numGenes = 75;   //how many genes in DNA
   int nextGene = 0;    //what the next gene is
+  int nextGeneTime = 10;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
   RocketDNA dna;  //DNA of rocket
   double fitness; //rocket's fitness
+  bool completed = false;
+  bool crashed = false;
+  double completedTime;
 
   //create new rocket
-  Rocket(double x, double y){
+  Rocket.randDNA(double x, double y){
+    pos = new Vector2(x, y);
+    vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
+    acc = new Vector2(0.0, 0.0);
+    grav = new Vector2(0.0, 0.05);
+    width = 15;
+    height = 40;
+    dna = new RocketDNA.giveNum(numGenes);
+  }
+
+  Rocket.givenDNA(double x, double y, RocketDNA dna){
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
     grav = new Vector2(0.0, 0.005);
     width = 15;
     height = 40;
-    dna = new RocketDNA(numGenes);
+    this.dna = dna;
   }
 
   //calculate rocket's fitness based on distance to target
   void calculateFitness(Vector2 target){
     double dist = pos.distanceTo(target);
-    this.fitness = 1/dist;
+    fitness = 0.0;
+    if(dist != 0) {
+      this.fitness = 50 / (dist / (window.innerWidth / 100));
+    }
+
+    if(completed){
+      fitness += (numGenes/completedTime)*50;
+    }
+
+
+    if(crashed){
+      fitness /= 5;
+    }
   }
 
   //update rocket
-  void update(){
-    acc.setFrom(dna.genes.elementAt(nextGene)); //set acceleration based on gene
-    acc.add(grav);  //add gravity to acceleration vector
-    vel.add(acc);   //add acceleration to velocity vector
-    if(vel.length > 4)
-      vel = vel.normalized()*4.0; //max velocity of rocket
-    pos.add(vel); //add velocity to position vector
+  void update(Vector2 target, int targetRadius, List<Rectangle> obstacles){
+    if(!completed && pos.distanceTo(target) < targetRadius){
+      completed = true;
+      completedTime = nextGene + 1/((nextGeneTime+1)-nextGeneCounter);
+      pos = target.clone();
+    }
+
+    if(!crashed){
+      Point point = new Point(pos.x, pos.y);
+      for (Rectangle r in obstacles){
+        if(r.containsPoint(point)){
+          crashed = true;
+        }
+      }
+
+      if(pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 || pos.x > window.innerWidth){
+        crashed = true;
+      }
+    }
+
+    if(!completed && !crashed) {
+      acc.setFrom(
+          dna.genes.elementAt(nextGene)); //set acceleration based on gene
+      acc.add(grav); //add gravity to acceleration vector
+      vel.add(acc); //add acceleration to velocity vector
+      if (vel.length > 4)
+        vel = vel.normalized() * 4.0; //max velocity of rocket
+      pos.add(vel); //add velocity to position vector
+    }
+
+
+
+
     nextGeneCounter++;
-    if(nextGeneCounter >= 5) {  //move to next gene
+    if (nextGeneCounter >= nextGeneTime) { //move to next gene
       if (nextGene < dna.genes.length - 1)
         nextGene++;
       nextGeneCounter = 0;
@@ -50,10 +102,13 @@ class Rocket{
 
   //draw rocket to canvas
   void draw(CanvasRenderingContext2D c2d){
-    c2d.translate(pos.x+width/2, pos.y+height/2);
+    c2d.translate(pos.x, pos.y);
     Vector2 heading = vel.normalized();
     double angle = atan2(heading.y, heading.x);
     c2d.rotate(angle+PI/2);
+
+    c2d.fillStyle = 'green';
+    c2d.fillRect(-5, -5, 10, 10);
 
     c2d.fillStyle = 'rgba(255, 255, 255, 0.5)';
     c2d.beginPath();

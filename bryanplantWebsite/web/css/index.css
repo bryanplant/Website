@@ -1,18 +1,77 @@
-* {
-    margin:0; padding:0;
-}
-
-html, body {
+html, body{
+    margin:0;
+    padding:0;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
-#canvas{
-    background: black; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(left top, black, #091223); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(left top, black, #091223); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(left top, black, #091223); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(left top, black, #091223); /* Standard syntax */
+body{
+    background: #E0A665;
+    background-image: -webkit-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-webkit-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -moz-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-moz-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -o-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-o-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
 }
 
+#canvas{
+    margin:0;
+    padding:0;
+    position: absolute;
+}
+
+#container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+#navigation{
+    top: 20%;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+#name{
+    font-size: 38pt;
+    color: white;
+    font-family: Open Sans, sans-serif;
+    margin-bottom: 10px;
+    font-weight: lighter;
+    letter-spacing: 2pt;
+    display: inline-block;
+}
+
+#info{
+    color: white;
+    font-style: italic;
+    font-family: Open Sans, sans-serif;
+    font-weight: 300;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+#menu{
+    list-style: none;
+    display: inline-block;
+}
+
+a:link{
+    font-family: sans-serif;
+    letter-spacing: 2pt;
+    font-size: 12pt;
+    text-decoration: none;
+    color:white;
+    border-right: 3px solid;
+    padding-right: 4px;
+    padding-left: 2px;
+}
+
+a:visited{
+    color:white;
+}
+
+a:link.last{
+    border: none;
+}
