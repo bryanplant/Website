@@ -13,7 +13,13 @@ import 'dart/StarColor.dart';
 Random rand = new Random();
 CanvasElement canvas = querySelector("#canvas");        //HTML Canvas
 CanvasRenderingContext2D c2d = canvas.getContext('2d'); //CanvasRenderContext
-DivElement container = canvas.querySelector("#container");
+HtmlElement nameHeader = querySelector('#name');
+HtmlElement infoHeader = querySelector('#info');
+HtmlElement menuHeader = querySelector('#menu');
+
+List<Rectangle> obstacles = [new Rectangle(nameHeader.parent.offsetLeft+nameHeader.offsetLeft, nameHeader.parent.offsetTop+nameHeader.offsetTop, nameHeader.clientWidth, nameHeader.clientHeight),
+                             new Rectangle(infoHeader.parent.offsetLeft+infoHeader.offsetLeft, infoHeader.parent.offsetTop+infoHeader.offsetTop, infoHeader.clientWidth, infoHeader.clientHeight),
+                             new Rectangle(menuHeader.parent.offsetLeft+menuHeader.offsetLeft, menuHeader.parent.offsetTop+menuHeader.offsetTop, menuHeader.clientWidth, menuHeader.clientHeight)];
 
 Queue stars = new Queue();  //contains star objects
 int maxStars = 20;          //max number of stars to be on screen
@@ -28,11 +34,13 @@ List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(17
 int numRockets = 40;
 List<Rocket> rockets = new List<Rocket>(numRockets);    //contains rocket objects
 
-int targetRadius = 25;  //radius of target
+int targetRadius = 35;  //radius of target
 Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of target
 
 double maxFit = 0.0; //contains fitness for best rocket
 double averageFit = 0.0;
+
+int genNum = 1;
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
@@ -43,6 +51,9 @@ void main() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     target.x = canvas.width/2;
+    obstacles = [new Rectangle(nameHeader.parent.offsetLeft+nameHeader.offsetLeft, nameHeader.parent.offsetTop+nameHeader.offsetTop, nameHeader.clientWidth, nameHeader.clientHeight),
+    new Rectangle(infoHeader.parent.offsetLeft+infoHeader.offsetLeft, infoHeader.parent.offsetTop+infoHeader.offsetTop, infoHeader.clientWidth, infoHeader.clientHeight),
+    new Rectangle(menuHeader.parent.offsetLeft+menuHeader.offsetLeft, menuHeader.parent.offsetTop+menuHeader.offsetTop, menuHeader.clientWidth, menuHeader.clientHeight)];
   });
 
   //create max number of stars without fading in
@@ -119,7 +130,7 @@ void update() {
   //update rocket
   bool allDone = true;
   for(Rocket r in rockets) {
-    r.update(target, targetRadius);
+    r.update(target, targetRadius, obstacles);
     if (!r.crashed && !r.completed){
        allDone = false;
     }
@@ -135,38 +146,49 @@ void update() {
 }
 
 void createNewGeneration(){
-    //find the max fitness value
-    maxFit = 0.0;
-    double totalFit = 0.0;
-    for(int i = 0; i < numRockets; i++) {
-      rockets[i].calculateFitness(target);
-      totalFit += rockets[i].fitness;
-      if(rockets[i].fitness > maxFit)
-        maxFit = rockets[i].fitness;
-    }
-    averageFit = totalFit/numRockets;
+  genNum++;
+  //find the max fitness value
+  maxFit = 0.0;
+  double totalFit = 0.0;
+  double fastestTime = 1000.0;
+  int fastestRocket=-1;
+  for(int i = 0; i < numRockets; i++) {
+    rockets[i].calculateFitness(target);
+    totalFit += rockets[i].fitness;
+    if(rockets[i].fitness > maxFit)
+      maxFit = rockets[i].fitness;
 
-    //add each rockets DNA to the genePool a certain number of times
-    //depending on each rocket's fitness
-    List<RocketDNA> genePool = new List();
-    for(int i = 0; i < numRockets; i++) {
-      print(rockets[i].fitness);
-      for(int j = 0; j < rockets[i].fitness*100; j++){
-        genePool.add(rockets[i].dna);
+    if(rockets[i].completed) {
+      if (rockets[i].completedTime < fastestTime) {
+        fastestTime = rockets[i].completedTime;
+        fastestRocket = i;
       }
     }
-    print("");
+  }
+  averageFit = totalFit/numRockets;
 
-    for(int i = 0; i < numRockets; i++) {
-      RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
-      RocketDNA dna2 = dna1;
-      while(dna2.genes == dna1.genes) {
-        dna2 = genePool[rand.nextInt(genePool.length)];
-      }
-      RocketDNA newDNA = dna1.crossover(dna2);
-      newDNA.mutate();
-      rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
+  if(fastestRocket != -1)
+    rockets[fastestRocket].fitness += 20;
+
+  //add each rockets DNA to the genePool a certain number of times
+  //depending on each rocket's fitness
+  List<RocketDNA> genePool = new List();
+  for(int i = 0; i < numRockets; i++) {
+    for(int j = 0; j < rockets[i].fitness*100; j++){
+      genePool.add(rockets[i].dna);
     }
+  }
+
+  for(int i = 0; i < numRockets; i++) {
+    RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
+    RocketDNA dna2 = dna1;
+    while(dna2.equals(dna1)) {
+      dna2 = genePool[rand.nextInt(genePool.length)];
+    }
+    RocketDNA newDNA = dna1.crossover(dna2);
+    newDNA.mutate();
+    rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
+  }
 }
 
 //draw everything to the canvas
@@ -179,17 +201,17 @@ void draw(){
   //draw target
   c2d.fillStyle = 'red';
   c2d.beginPath();
-  c2d.arc(target.x, target.y+targetRadius, targetRadius, 0, 2 * PI);
+  c2d.arc(target.x, target.y, targetRadius, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
   c2d.fillStyle = 'white';
   c2d.beginPath();
-  c2d.arc(target.x, target.y+targetRadius, targetRadius/1.5, 0, 2 * PI);
+  c2d.arc(target.x, target.y, targetRadius/1.5, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
   c2d.fillStyle = 'red';
   c2d.beginPath();
-  c2d.arc(target.x, target.y+targetRadius, targetRadius/4, 0, 2 * PI);
+  c2d.arc(target.x, target.y, targetRadius/4, 0, 2 * PI);
   c2d.stroke();
   c2d.fill();
 
@@ -197,25 +219,17 @@ void draw(){
     r.draw(c2d);
   }
 
-  c2d.font = "14px sans-serif";
-  c2d.textAlign = 'center';
-  c2d.fillStyle = 'white';
-  c2d.fillText("Target", window.innerWidth/2, 40);
+/*  c2d.fillStyle = 'rgba(255, 0, 0, .2)';
+  for(Rectangle r in obstacles) {
+    c2d.fillRect(r.left, r.top, r.width, r.height);
+  }*/
 
   c2d.font = "12px sans-serif";
   c2d.fillStyle = 'white';
   c2d.textAlign = 'left';
+  c2d.fillText("Generation Number: " + genNum.toString(), 20, window.innerHeight-60);
+  c2d.fillText("Max Fitness of Generation: " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
   c2d.fillText("Average Fitness of Generation: " + averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
-
-  c2d.font = "12px sans-serif";
-  c2d.fillStyle = 'white';
-  c2d.textAlign = 'left';
-  c2d.fillText("Max Fitness of Generation:         " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
-
-/*  c2d.font = "48px sans-serif";
-  c2d.textAlign = 'center';
-  c2d.fillStyle = 'white';
-  c2d.fillText("Bryan Plant", window.innerWidth/2, window.innerHeight/4);*/
 }
 
 
