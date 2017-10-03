@@ -57,7 +57,7 @@ body{
     display: inline-block;
 }
 
-a:link{
+a:link, a:visited{
     font-family: sans-serif;
     letter-spacing: 2pt;
     font-size: 12pt;
@@ -66,10 +66,6 @@ a:link{
     border-right: 3px solid;
     padding-right: 4px;
     padding-left: 2px;
-}
-
-a:visited{
-    color:white;
 }
 
 a:link.last{

@@ -176,7 +176,7 @@ void createNewGeneration(){
   //depending on each rocket's fitness
   List<RocketDNA> genePool = new List();
   for(int i = 0; i < numRockets; i++) {
-    for(int j = 0; j < rockets[i].fitness*100; j++){
+    for (int j = 0; j < rockets[i].fitness * 100; j++) {
       genePool.add(rockets[i].dna);
     }
   }

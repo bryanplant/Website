@@ -6,13 +6,60 @@ html, body{
     overflow: hidden;
 }
 
+body{
+    background: #E0A665;
+    background-image: -webkit-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-webkit-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -moz-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-moz-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: -o-radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),-o-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+    background-image: radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
+}
+
 #wrapper{
     width: 80%;
     height: 100%;
     margin: 0 auto;
 }
 
+#navigation{
+    margin-top: 50px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+#navBar{
+    list-style: none;
+    display: inline-block;
+}
+
+a:link, a:visited{
+    font-family: sans-serif;
+    letter-spacing: 2pt;
+    font-size: 12pt;
+    text-decoration: none;
+    color:white;
+    border-right: 3px solid;
+    padding-right: 4px;
+    padding-left: 2px;
+}
+
+a:link.last{
+    border: none;
+}
+
+#image{
+    display: block;
+    margin: auto;
+    border: 5px solid;
+}
+
 #header{
     text-align: center;
     margin-top: 50px;
+    color: white;
+}
+
+#info{
+    text-align: center;
+    color: white;
 }
