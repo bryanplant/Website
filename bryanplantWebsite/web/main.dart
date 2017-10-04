@@ -187,7 +187,12 @@ void createNewGeneration(){
     while(dna2.equals(dna1)) {
       dna2 = genePool[rand.nextInt(genePool.length)];
     }
-    RocketDNA newDNA = dna1.crossover(dna2);
+
+    RocketDNA newDNA;
+    if(rand.nextInt(2) == 0)
+      newDNA = dna1.crossover(dna2);
+    else
+      newDNA = dna2.crossover(dna1);
     newDNA.mutate();
     rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
   }

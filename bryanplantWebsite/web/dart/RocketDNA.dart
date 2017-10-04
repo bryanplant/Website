@@ -35,8 +35,8 @@ class RocketDNA{
 
   void mutate(){
     for(int i = 0; i < this.genes.length; i++){
-      if(rand.nextInt(this.genes.length~/2) == 0){
-        int numMutatedGenes = rand.nextInt(this.genes.length~/10) + 1;
+      if(rand.nextInt(this.genes.length) == 0){
+        int numMutatedGenes = rand.nextInt(4) + 1;
         for(int j = 0; j < numMutatedGenes; j++) {
           if(i+j < this.genes.length) {
             this.genes[i + j] = new Vector2(((rand.nextDouble()*2)-1)/10, (rand.nextDouble()-1)/10);

@@ -32,7 +32,7 @@ body{
     display: inline-block;
 }
 
-a:link, a:visited{
+#navBar a:link, #navBar a:visited{
     font-family: sans-serif;
     letter-spacing: 2pt;
     font-size: 12pt;
@@ -43,7 +43,7 @@ a:link, a:visited{
     padding-left: 2px;
 }
 
-a:link.last{
+#navBar a:link.last{
     border: none;
 }
 
@@ -59,7 +59,15 @@ a:link.last{
     color: white;
 }
 
-#info{
+.info{
     text-align: center;
+    font-family: 'Slabo 13px', serif;
+    font-size: 12pt;
     color: white;
+    max-width: 600px;
+    margin: 20px auto 0;
+}
+
+a:visited.pLink, a:link.pLink{
+    color: #0F1B58;
 }
