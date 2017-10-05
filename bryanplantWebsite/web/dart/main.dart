@@ -1,13 +1,13 @@
-import 'dart/Rocket.dart';
-import 'dart/RocketDNA.dart';
+import 'Rocket.dart';
+import 'RocketDNA.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 
-import 'dart/Star.dart';
-import 'dart/StarColor.dart';
+import 'Star.dart';
+import 'StarColor.dart';
 
 
 Random rand = new Random();

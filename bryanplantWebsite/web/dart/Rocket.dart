@@ -106,9 +106,6 @@ class Rocket{
     double angle = atan2(heading.y, heading.x);
     c2d.rotate(angle+PI/2);
 
-    c2d.fillStyle = 'green';
-    c2d.fillRect(-5, -5, 10, 10);
-
     c2d.fillStyle = 'rgba(255, 255, 255, 0.5)';
     c2d.beginPath();
     c2d.lineTo(-width/2, -height/2);
