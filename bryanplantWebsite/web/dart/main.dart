@@ -1,13 +1,13 @@
-import 'dart/Rocket.dart';
-import 'dart/RocketDNA.dart';
+import 'Rocket.dart';
+import 'RocketDNA.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 
-import 'dart/Star.dart';
-import 'dart/StarColor.dart';
+import 'Star.dart';
+import 'StarColor.dart';
 
 
 Random rand = new Random();
@@ -167,14 +167,16 @@ void createNewGeneration(){
   }
   averageFit = totalFit/numRockets;
 
-  if(fastestRocket != -1)
-    rockets[fastestRocket].fitness += 20;
+  if(fastestRocket != -1) {
+    rockets[fastestRocket].fitness += 25;
+    print(rockets[fastestRocket].fitness);
+  }
 
   //add each rockets DNA to the genePool a certain number of times
   //depending on each rocket's fitness
   List<RocketDNA> genePool = new List();
   for(int i = 0; i < numRockets; i++) {
-    for(int j = 0; j < rockets[i].fitness*100; j++){
+    for (int j = 0; j < rockets[i].fitness * 100; j++) {
       genePool.add(rockets[i].dna);
     }
   }
@@ -185,7 +187,12 @@ void createNewGeneration(){
     while(dna2.equals(dna1)) {
       dna2 = genePool[rand.nextInt(genePool.length)];
     }
-    RocketDNA newDNA = dna1.crossover(dna2);
+
+    RocketDNA newDNA;
+    if(rand.nextInt(2) == 0)
+      newDNA = dna1.crossover(dna2);
+    else
+      newDNA = dna2.crossover(dna1);
     newDNA.mutate();
     rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
   }
