@@ -3,7 +3,7 @@ import 'dart:html';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 
-class Rocket{
+class Rocket implements Comparable<Rocket>{
   Vector2 pos;  //vector containing position of star
   Vector2 vel;  //vector containing velocity of star
   Vector2 acc;  //vector containing acceleration of star
@@ -51,7 +51,6 @@ class Rocket{
     if(completed){
       fitness += (numGenes/completedTime)*50;
     }
-
 
     if(crashed){
       fitness /= 5;
@@ -134,5 +133,11 @@ class Rocket{
     c2d.fill();
 
     c2d.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  int compareTo(Rocket that){
+    if(this.fitness < that.fitness)
+      return -1;
+    return 1;
   }
 }
