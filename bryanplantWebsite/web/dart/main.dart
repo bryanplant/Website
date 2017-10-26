@@ -1,6 +1,5 @@
 import 'Population.dart';
 import 'Rocket.dart';
-import 'RocketDNA.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';

@@ -1,5 +1,4 @@
 import 'Rocket.dart';
-import 'RocketDNA.dart';
 import 'dart:html';
 
 import 'dart:math';
@@ -45,32 +44,15 @@ class Population{
     Population newGen = new Population(this.size);
     if (this.rockets.length == 0) {
       for (int i = 0; i < size; i ++) {
-        newGen.add(new Rocket.randDNA(window.innerWidth / 2, window.innerHeight - 50.toDouble()));
-        print("Called");
+        newGen.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), null));
       }
       return newGen;
     }
     else {
       newGen = select(target);
-      newGen = crossover();
-      newGen = mutate();
-      //return newGen;
-      for (int i = 0; i < size; i++) {
-        RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
-        RocketDNA dna2 = dna1;
-        while (dna2.equals(dna1)) {
-          dna2 = genePool[rand.nextInt(genePool.length)];
-        }
+      newGen = crossover(newGen);
+      newGen = mutate(newGen);
 
-        RocketDNA newDNA;
-        if (rand.nextInt(2) == 0)
-          newDNA = dna1.crossover(dna2);
-        else
-          newDNA = dna2.crossover(dna1);
-        newDNA.mutate();
-        rockets[i] = new Rocket.givenDNA(
-            window.innerWidth / 2, window.innerHeight - 50.0, newDNA);
-      }
       return newGen;
     }
   }
@@ -117,15 +99,47 @@ class Population{
 
     for(int i = 0; i < size; i++){
       int index = rand.nextInt(pool.length);
-      parents.add(rockets[index]);
+      parents.add(pool[index]);
     }
+    return parents;
   }
 
-  Population crossover(){
-
+  Population crossover(Population parents){
+    Population offspring = new Population(size);
+    while(!parents.rockets.isEmpty){
+      Rocket parent1 = parents.rockets[0];
+      Rocket parent2 = parents.rockets[rand.nextInt(parents.rockets.length-1)+1];
+      List<Vector2> dna1 = new List<Vector2>();
+      List<Vector2> dna2 = new List<Vector2>();
+      for (int i = 0; i < rockets[0].numGenes; i++) {
+        if(rand.nextInt(2) == 0){
+          dna1.add(parent1.dna[i]);
+          dna2.add(parent2.dna[i]);
+        }
+        else{
+          dna1.add(parent2.dna[i]);
+          dna2.add(parent1.dna[i]);
+        }
+      }
+      print(parents.rockets.length);
+      offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
+      offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
+      parents.rockets.remove(parent1);
+      parents.rockets.remove(parent2);
+    }
+    return offspring;
   }
 
-  Population mutate(){
-
+  Population mutate(Population population){
+    Population mutated = new Population(size);
+    for(Rocket r in population.rockets){
+      for(Vector2 gene in r.dna) {
+        if (rand.nextInt(population.rockets[0].numGenes) == 0) {
+          gene += new Vector2(rand.nextDouble()/20, rand.nextDouble()/20);
+        }
+      }
+      mutated.add(r);
+    }
+    return mutated;
   }
 }
