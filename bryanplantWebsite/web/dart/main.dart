@@ -1,5 +1,5 @@
+import 'Population.dart';
 import 'Rocket.dart';
-import 'RocketDNA.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
@@ -31,16 +31,13 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-int numRockets = 40;
-List<Rocket> rockets = new List<Rocket>(numRockets);    //contains rocket objects
+Population population = new Population(40);
 
 int targetRadius = 35;  //radius of target
 Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of target
 
 double maxFit = 0.0; //contains fitness for best rocket
 double averageFit = 0.0;
-
-int genNum = 1;
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
@@ -62,9 +59,7 @@ void main() {
   }
 
   //create first generation of rockets
-  for(int i = 0; i < rockets.length; i++){
-    rockets[i] = new Rocket.randDNA(window.innerWidth / 2, window.innerHeight - 50.toDouble());
-  }
+  population = population.newGeneration(target);
 
   //update and draw approximately 60 times per second
   new Timer.periodic(new Duration(milliseconds: 17), (Timer t) {
@@ -127,75 +122,15 @@ void update() {
     stars.removeWhere((s) => s.faded);
   }
 
-  //update rocket
-  bool allDone = true;
-  for(Rocket r in rockets) {
-    r.update(target, targetRadius, obstacles);
-    if (!r.crashed && !r.completed){
-       allDone = false;
-    }
-  }
+  //update population
+  population.update(target, targetRadius, obstacles);
 
-  if(allDone){
-    createNewGeneration();
+  if(population.allDone){
+    population = population.newGeneration(target);
   }
 
   //create new generation if rockets are out of genes
-  if(rockets[0].nextGene == rockets[0].numGenes-1)
-    createNewGeneration();
-}
 
-void createNewGeneration(){
-  genNum++;
-  //find the max fitness value
-  maxFit = 0.0;
-  double totalFit = 0.0;
-  double fastestTime = 1000.0;
-  int fastestRocket=-1;
-  for(int i = 0; i < numRockets; i++) {
-    rockets[i].calculateFitness(target);
-    totalFit += rockets[i].fitness;
-    if(rockets[i].fitness > maxFit)
-      maxFit = rockets[i].fitness;
-
-    if(rockets[i].completed) {
-      if (rockets[i].completedTime < fastestTime) {
-        fastestTime = rockets[i].completedTime;
-        fastestRocket = i;
-      }
-    }
-  }
-  averageFit = totalFit/numRockets;
-
-  if(fastestRocket != -1) {
-    rockets[fastestRocket].fitness += 25;
-    print(rockets[fastestRocket].fitness);
-  }
-
-  //add each rockets DNA to the genePool a certain number of times
-  //depending on each rocket's fitness
-  List<RocketDNA> genePool = new List();
-  for(int i = 0; i < numRockets; i++) {
-    for (int j = 0; j < rockets[i].fitness * 100; j++) {
-      genePool.add(rockets[i].dna);
-    }
-  }
-
-  for(int i = 0; i < numRockets; i++) {
-    RocketDNA dna1 = genePool[rand.nextInt(genePool.length)];
-    RocketDNA dna2 = dna1;
-    while(dna2.equals(dna1)) {
-      dna2 = genePool[rand.nextInt(genePool.length)];
-    }
-
-    RocketDNA newDNA;
-    if(rand.nextInt(2) == 0)
-      newDNA = dna1.crossover(dna2);
-    else
-      newDNA = dna2.crossover(dna1);
-    newDNA.mutate();
-    rockets[i] = new Rocket.givenDNA(window.innerWidth/2, window.innerHeight - 50.0, newDNA);
-  }
 }
 
 //draw everything to the canvas
@@ -222,19 +157,12 @@ void draw(){
   c2d.stroke();
   c2d.fill();
 
-  for(Rocket r in rockets) { //draw rockets to canvas
-    r.draw(c2d);
-  }
-
-/*  c2d.fillStyle = 'rgba(255, 0, 0, .2)';
-  for(Rectangle r in obstacles) {
-    c2d.fillRect(r.left, r.top, r.width, r.height);
-  }*/
+  population.draw(c2d);
 
   c2d.font = "12px sans-serif";
   c2d.fillStyle = 'white';
   c2d.textAlign = 'left';
-  c2d.fillText("Generation Number: " + genNum.toString(), 20, window.innerHeight-60);
+  c2d.fillText("Generation Number: " + Population.genNum.toString(), 20, window.innerHeight-60);
   c2d.fillText("Max Fitness of Generation: " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
   c2d.fillText("Average Fitness of Generation: " + averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
 }

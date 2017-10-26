@@ -1,9 +1,9 @@
-import 'RocketDNA.dart';
 import 'dart:html';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 
-class Rocket{
+class Rocket implements Comparable<Rocket>{
+  Random rand = new Random();
   Vector2 pos;  //vector containing position of star
   Vector2 vel;  //vector containing velocity of star
   Vector2 acc;  //vector containing acceleration of star
@@ -13,31 +13,31 @@ class Rocket{
   int nextGene = 0;    //what the next gene is
   int nextGeneTime = 10;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
-  RocketDNA dna;  //DNA of rocket
+  List<Vector2> dna;
   double fitness; //rocket's fitness
   bool completed = false;
   bool crashed = false;
   double completedTime;
 
   //create new rocket
-  Rocket.randDNA(double x, double y){
+  Rocket(double x, double y, List<Vector2> dna){
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
     grav = new Vector2(0.0, 0.025);
     width = 15;
     height = 40;
-    dna = new RocketDNA.giveNum(numGenes);
-  }
-
-  Rocket.givenDNA(double x, double y, RocketDNA dna){
-    pos = new Vector2(x, y);
-    vel = new Vector2(0.0, -.5);  //start rocket with upwards velocity
-    acc = new Vector2(0.0, 0.0);
-    grav = new Vector2(0.0, 0.025);
-    width = 15;
-    height = 40;
-    this.dna = dna;
+    if(dna == null) {
+      this.dna = new List<Vector2>(numGenes);
+      for (int i = 0; i < numGenes;
+      i++) { //set each gene to a random set of values
+        this.dna[i] = new Vector2(((rand.nextDouble() * 4) - 2) / 10,
+            ((rand.nextDouble() * 1.50) - 1) / 10);
+      }
+    }
+    else{
+      this.dna = dna;
+    }
   }
 
   //calculate rocket's fitness based on distance to target
@@ -51,7 +51,6 @@ class Rocket{
     if(completed){
       fitness += (numGenes/completedTime)*50;
     }
-
 
     if(crashed){
       fitness /= 5;
@@ -80,7 +79,7 @@ class Rocket{
     }
 
     if(!completed && !crashed) {
-      acc.setFrom(dna.genes.elementAt(nextGene)); //set acceleration based on gene
+      acc.setFrom(dna.elementAt(nextGene)); //set acceleration based on gene
       acc.add(grav); //add gravity to acceleration vector
       vel.add(acc); //add acceleration to velocity vector
       if (vel.length > 5)
@@ -93,7 +92,7 @@ class Rocket{
 
     nextGeneCounter++;
     if (nextGeneCounter >= nextGeneTime) { //move to next gene
-      if (nextGene < dna.genes.length - 1)
+      if (nextGene < dna.length - 1)
         nextGene++;
       nextGeneCounter = 0;
     }
@@ -134,5 +133,11 @@ class Rocket{
     c2d.fill();
 
     c2d.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  int compareTo(Rocket that){
+    if(this.fitness < that.fitness)
+      return -1;
+    return 1;
   }
 }
