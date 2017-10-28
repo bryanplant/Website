@@ -9,7 +9,7 @@ class Rocket implements Comparable<Rocket>{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 75;   //how many genes in DNA
+  int numGenes = 50;   //how many genes in DNA
   int nextGene = 0;    //what the next gene is
   int nextGeneTime = 10;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
@@ -45,11 +45,14 @@ class Rocket implements Comparable<Rocket>{
     double dist = pos.distanceTo(target);
     fitness = 0.0;
     if(dist != 0) {
-      this.fitness = 50 / (dist / (window.innerWidth / 100));
+      this.fitness += 100 / dist;
+    }
+    else{
+      this.fitness += 100;
     }
 
     if(completed){
-      fitness += (numGenes/completedTime)*50;
+      fitness += (numGenes/completedTime)*10;
     }
 
     if(crashed){
@@ -65,7 +68,14 @@ class Rocket implements Comparable<Rocket>{
       pos = target.clone();
     }
 
-    if(!crashed){
+    if(!completed && !crashed) {
+      acc.setFrom(dna.elementAt(nextGene)); //set acceleration based on gene
+      acc.add(grav); //add gravity to acceleration vector
+      vel.add(acc); //add acceleration to velocity vector
+      if (vel.length > 5)
+        vel = vel.normalized() * 5.0; //max velocity of rocket
+      pos.add(vel); //add velocity to position vector
+
       Point point = new Point(pos.x, pos.y);
       for (Rectangle r in obstacles){
         if(r.containsPoint(point)){
@@ -77,18 +87,6 @@ class Rocket implements Comparable<Rocket>{
         crashed = true;
       }
     }
-
-    if(!completed && !crashed) {
-      acc.setFrom(dna.elementAt(nextGene)); //set acceleration based on gene
-      acc.add(grav); //add gravity to acceleration vector
-      vel.add(acc); //add acceleration to velocity vector
-      if (vel.length > 5)
-        vel = vel.normalized() * 5.0; //max velocity of rocket
-      pos.add(vel); //add velocity to position vector
-    }
-
-
-
 
     nextGeneCounter++;
     if (nextGeneCounter >= nextGeneTime) { //move to next gene

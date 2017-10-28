@@ -9,8 +9,8 @@ class Population{
   List<Rocket> rockets = new List<Rocket>();
   int size;
   static int genNum = 0;
-  double maxFit;
-  double averageFit;
+  double maxFit = 0.0;
+  double averageFit = 0.0;
   bool allDone;
 
   Population(int size){
@@ -39,7 +39,7 @@ class Population{
     }
   }
 
-  Population newGeneration(Vector2 target) {
+  Population newGeneration() {
     genNum++;
     Population newGen = new Population(this.size);
     if (this.rockets.length == 0) {
@@ -49,47 +49,38 @@ class Population{
       return newGen;
     }
     else {
-      newGen = select(target);
-      newGen = crossover(newGen);
+      newGen = select();
+      newGen = uniformCrossover(newGen);
       newGen = mutate(newGen);
 
       return newGen;
     }
   }
 
-  Population select(target){
-    //find the max fitness value
-    Population parents = new Population(size);
+  void calcFitness(Vector2 target){
     maxFit = 0.0;
     double totalFit = 0.0;
-    double fastestTime = 1000.0;
-    int fastestRocket = -1;
+
+    //calculate average fitness and maxFitness
     for (int i = 0; i < size; i++) {
       rockets[i].calculateFitness(target);
       totalFit += rockets[i].fitness;
       if (rockets[i].fitness > maxFit)
-      maxFit = rockets[i].fitness;
-
-      if (rockets[i].completed) {
-        if (rockets[i].completedTime < fastestTime) {
-          fastestTime = rockets[i].completedTime;
-          fastestRocket = i;
-       }
-      }
+        maxFit = rockets[i].fitness;
     }
     averageFit = totalFit / size;
-
-    if (fastestRocket != -1) {
-      rockets[fastestRocket].fitness += 25;
-      print(rockets[fastestRocket].fitness);
-    }
 
     rockets.sort((a, b) => a.compareTo(b));
 
     for(int i = 0; i < size; i++){
-      rockets[i].fitness = i.toDouble();
+      rockets[i].fitness = i.toDouble() + 1;
     }
+    rockets[size-1].fitness *= 2;
+  }
 
+  Population select(){
+    //find the max fitness value
+    Population parents = new Population(size);
     List<Rocket> pool = new List<Rocket>();
     for(int i = 0; i < size; i++){
       for(int j = 0; j < rockets[i].fitness.toInt(); j++){
@@ -104,7 +95,35 @@ class Population{
     return parents;
   }
 
-  Population crossover(Population parents){
+  Population centerCrossover(Population parents){
+    Population offspring = new Population(size);
+    while(!parents.rockets.isEmpty){
+      Rocket parent1 = parents.rockets[0];
+      Rocket parent2 = parents.rockets[rand.nextInt(parents.rockets.length-1)+1];
+      List<Vector2> dna1 = new List<Vector2>();
+      List<Vector2> dna2 = new List<Vector2>();
+
+      int center = rand.nextInt(parent1.dna.length);
+      for(int i = 0; i < parent1.dna.length; i++){
+        if(i < center){
+          dna1.add(parent1.dna[i]);
+          dna2.add(parent2.dna[i]);
+        }
+        else{
+          dna1.add(parent2.dna[i]);
+          dna2.add(parent1.dna[i]);
+        }
+      }
+
+      offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
+      offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
+      parents.rockets.remove(parent1);
+      parents.rockets.remove(parent2);
+    }
+    return offspring;
+  }
+
+  Population uniformCrossover(Population parents){
     Population offspring = new Population(size);
     while(!parents.rockets.isEmpty){
       Rocket parent1 = parents.rockets[0];
@@ -121,7 +140,6 @@ class Population{
           dna2.add(parent1.dna[i]);
         }
       }
-      print(parents.rockets.length);
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
       parents.rockets.remove(parent1);
@@ -133,9 +151,9 @@ class Population{
   Population mutate(Population population){
     Population mutated = new Population(size);
     for(Rocket r in population.rockets){
-      for(Vector2 gene in r.dna) {
-        if (rand.nextInt(population.rockets[0].numGenes) == 0) {
-          gene += new Vector2(rand.nextDouble()/20, rand.nextDouble()/20);
+      for(int i = 0; i < r.numGenes; i++) {
+        if (rand.nextInt(r.numGenes) == 0) {
+          r.dna[i] += new Vector2(rand.nextDouble()/20, rand.nextDouble()/20);
         }
       }
       mutated.add(r);

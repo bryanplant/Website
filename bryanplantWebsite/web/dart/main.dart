@@ -1,5 +1,4 @@
 import 'Population.dart';
-import 'Rocket.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
@@ -59,7 +58,7 @@ void main() {
   }
 
   //create first generation of rockets
-  population = population.newGeneration(target);
+  population = population.newGeneration();
 
   //update and draw approximately 60 times per second
   new Timer.periodic(new Duration(milliseconds: 17), (Timer t) {
@@ -126,7 +125,10 @@ void update() {
   population.update(target, targetRadius, obstacles);
 
   if(population.allDone){
-    population = population.newGeneration(target);
+    population.calcFitness(target);
+    maxFit = population.maxFit;
+    averageFit = population.averageFit;
+    population = population.newGeneration();
   }
 
   //create new generation if rockets are out of genes
@@ -163,8 +165,8 @@ void draw(){
   c2d.fillStyle = 'white';
   c2d.textAlign = 'left';
   c2d.fillText("Generation Number: " + Population.genNum.toString(), 20, window.innerHeight-60);
-  c2d.fillText("Max Fitness of Generation: " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
-  c2d.fillText("Average Fitness of Generation: " + averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
+  c2d.fillText("Max Fitness of Last Generation:        " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
+  c2d.fillText("Average Fitness of Last Generation: " + averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
 }
 
 

@@ -26,6 +26,19 @@ body{
     position: absolute;
 }
 
+#about{
+    font-size: 12pt;
+    color: white;
+    font-family: Open Sans, sans-serif;
+    font-weight: 300;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    margin: 0;
+}
+
 #navigation{
     top: 20%;
     position: relative;
@@ -58,6 +71,10 @@ body{
 }
 
 a:link, a:visited{
+    color: white;
+}
+
+a:link.navLink, a:visited.navLink{
     font-family: sans-serif;
     letter-spacing: 2pt;
     font-size: 12pt;
@@ -68,6 +85,6 @@ a:link, a:visited{
     padding-left: 2px;
 }
 
-a:link.last{
+a:link.navLink.last{
     border: none;
 }

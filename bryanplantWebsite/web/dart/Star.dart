@@ -1,8 +1,8 @@
 import 'dart:html';
 
 class Star{
-  int x; //x-coord of star
-  int y; //y-coord of star
+  int x; //x-coordinate of star
+  int y; //y-coordinate of star
   int width; //width of star
   int r, g, b; //red, green and blue color values
   double alpha; //alpha of color
