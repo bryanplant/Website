@@ -9,7 +9,7 @@ class Rocket implements Comparable<Rocket>{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 50;   //how many genes in DNA
+  int numGenes = 65;   //how many genes in DNA
   int nextGene = 0;    //what the next gene is
   int nextGeneTime = 10;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
@@ -43,16 +43,28 @@ class Rocket implements Comparable<Rocket>{
   //calculate rocket's fitness based on distance to target
   void calculateFitness(Vector2 target){
     double dist = pos.distanceTo(target);
+    double distY = absoluteError(pos.y, target.y);
     fitness = 0.0;
+
+    //calculate fitness value for total distance
     if(dist != 0) {
-      this.fitness += 100 / dist;
+      this.fitness += 200 / (sqrt(dist)+4);
     }
     else{
-      this.fitness += 100;
+      this.fitness += 40;
+    }
+
+    //calculate fitness value for  y distance
+    //prefer closer y distance
+    if(distY != 0) {
+      this.fitness += 10 / (sqrt(distY)+4);
+    }
+    else{
+      this.fitness += 20;
     }
 
     if(completed){
-      fitness += (numGenes/completedTime)*10;
+      fitness += (numGenes/completedTime)*5;
     }
 
     if(crashed){

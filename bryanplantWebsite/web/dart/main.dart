@@ -30,7 +30,7 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-Population population = new Population(40);
+Population population = new Population(50);
 
 int targetRadius = 35;  //radius of target
 Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of target

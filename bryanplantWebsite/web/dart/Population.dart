@@ -50,7 +50,7 @@ class Population{
     }
     else {
       newGen = select();
-      newGen = uniformCrossover(newGen);
+      newGen = centerCrossover(newGen);
       newGen = mutate(newGen);
 
       return newGen;
