@@ -9,15 +9,17 @@ class Rocket implements Comparable<Rocket>{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 40;   //how many genes in DNA
+  int numGenes = 100;   //how many genes in DNA
   int curGene = 0;    //what the next gene is
-  int nextGeneTime = 10;
+  int nextGeneTime = 3;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
   List<Vector2> dna;
   double fitness; //rocket's fitness
   bool completed = false;
   bool crashed = false;
+  double closestDistance = double.MAX_FINITE; //closest distance to goal during iteration
   double completedTime;
+  double crashedTime;
 
   //create new rocket
   Rocket(double x, double y, List<Vector2> dna){
@@ -52,21 +54,22 @@ class Rocket implements Comparable<Rocket>{
       this.fitness += 40;
     }
 
-    //calculate fitness value for  y distance
-    //prefer closer y distance
-    if(distY != 0) {
-      this.fitness += 10 / (sqrt(distY)+4);
+    //calculate fitness value for closest distance
+    if(closestDistance != 0) {
+      this.fitness += 100 / (sqrt(dist)+4);
     }
     else{
       this.fitness += 20;
     }
 
+    //calculate fitness value for completing faster
     if(completed){
-      fitness += (numGenes/completedTime)*5;
+      fitness += 5*(numGenes/completedTime);
     }
 
+    //calculate fitness value for crashing later
     if(crashed){
-      fitness /= 5;
+      fitness += 0.5*(numGenes/(numGenes-crashedTime));
     }
   }
 
@@ -76,26 +79,35 @@ class Rocket implements Comparable<Rocket>{
       completed = true;
       completedTime = curGene + 1/((nextGeneTime+1)-nextGeneCounter);
       pos = target.clone();
+      closestDistance = 0.0;
     }
 
     if(!completed && !crashed) {
       acc.setFrom(dna.elementAt(curGene)); //set acceleration based on gene
       acc.add(grav); //add gravity to acceleration vector
       vel.add(acc); //add acceleration to velocity vector
-      if (vel.length > 5)
-        vel = vel.normalized() * 5.0; //max velocity of rocket
+      if (vel.length > 7.5)
+        vel = vel.normalized() * 7.5; //max velocity of rocket
       pos.add(vel); //add velocity to position vector
 
+      //check if collided with obstacles
       Point point = new Point(pos.x, pos.y);
       for (Rectangle r in obstacles){
         if(r.containsPoint(point)){
           crashed = true;
+          crashedTime = curGene + 1/((nextGeneTime+1)-nextGeneCounter);
         }
       }
 
+      //check if collided with window edges
       if(pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 || pos.x > window.innerWidth){
         crashed = true;
+        crashedTime = curGene + 1/((nextGeneTime+1)-nextGeneCounter);
       }
+
+      //update closest position
+      if(pos.distanceTo(target) < closestDistance)
+        closestDistance = pos.distanceTo(target);
     }
 
     nextGeneCounter++;
@@ -144,7 +156,7 @@ class Rocket implements Comparable<Rocket>{
   }
 
   Vector2 randomGene(){
-    return new Vector2((rand.nextDouble()*1.5)-.75, (rand.nextDouble()*1.5)-1);
+    return new Vector2((rand.nextDouble()-.5), (rand.nextDouble()-.5));
   }
 
   int compareTo(Rocket that){
