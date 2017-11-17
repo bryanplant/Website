@@ -19,7 +19,6 @@ class Rocket implements Comparable<Rocket>{
   bool crashed = false;
   double closestDistance = double.MAX_FINITE; //closest distance to goal during iteration
   double completedTime;
-  double crashedTime;
 
   //create new rocket
   Rocket(double x, double y, List<Vector2> dna){
@@ -43,33 +42,19 @@ class Rocket implements Comparable<Rocket>{
   //calculate rocket's fitness based on distance to target
   void calculateFitness(Vector2 target){
     double dist = pos.distanceTo(target);
-    double distY = (pos.y-target.y).abs();
     fitness = 0.0;
 
     //calculate fitness value for total distance
-    if(dist != 0) {
-      this.fitness += 200 / (sqrt(dist)+4);
-    }
-    else{
-      this.fitness += 40;
-    }
+    if(dist < 1000)
+      fitness += (1000 - dist);
 
     //calculate fitness value for closest distance
-    if(closestDistance != 0) {
-      this.fitness += 100 / (sqrt(dist)+4);
-    }
-    else{
-      this.fitness += 20;
-    }
+    if(closestDistance < 1000)
+      fitness += .5*(1000 - closestDistance);
 
     //calculate fitness value for completing faster
     if(completed){
-      fitness += 5*(numGenes/completedTime);
-    }
-
-    //calculate fitness value for crashing later
-    if(crashed){
-      fitness += 0.5*(numGenes/(numGenes-crashedTime));
+      fitness += 100*(numGenes/completedTime);
     }
   }
 
@@ -95,14 +80,12 @@ class Rocket implements Comparable<Rocket>{
       for (Rectangle r in obstacles){
         if(r.containsPoint(point)){
           crashed = true;
-          crashedTime = curGene + 1/((nextGeneTime+1)-nextGeneCounter);
         }
       }
 
       //check if collided with window edges
       if(pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 || pos.x > window.innerWidth){
         crashed = true;
-        crashedTime = curGene + 1/((nextGeneTime+1)-nextGeneCounter);
       }
 
       //update closest position

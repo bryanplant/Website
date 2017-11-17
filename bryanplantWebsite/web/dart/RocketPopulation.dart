@@ -81,7 +81,6 @@ class RocketPopulation{
     for(int i = 0; i < size; i++){
       rockets[i].fitness = i.toDouble() + 1;
     }
-    rockets[size-1].fitness *= 2;
   }
 
   List<Rocket> select(){
