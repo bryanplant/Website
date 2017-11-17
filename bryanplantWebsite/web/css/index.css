@@ -14,6 +14,29 @@ body{
     background-image: radial-gradient(closest-corner, rgba(0,0,0,0) 60%, rgba(0, 0, 0, 0.2)),linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
 }
 
+h1{
+    font-size: 38pt;
+    color: white;
+    font-family: Open Sans, sans-serif;
+    margin-bottom: 10px;
+    font-weight: lighter;
+    letter-spacing: 2pt;
+}
+
+h2{
+    color: white;
+    font-style: italic;
+    font-family: Open Sans, sans-serif;
+    font-weight: 300;
+}
+
+h3{
+    font-size: 12pt;
+    color: white;
+    font-family: Open Sans, sans-serif;
+    font-weight: 300;
+}
+
 #canvas{
     margin:0;
     padding:0;
@@ -26,43 +49,20 @@ body{
     position: absolute;
 }
 
-#about{
-    font-size: 12pt;
-    color: white;
-    font-family: Open Sans, sans-serif;
-    font-weight: 300;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding-bottom: 20px;
-    padding-right: 20px;
-    margin: 0;
-}
-
-#navigation{
-    top: 20%;
-    position: relative;
-    text-align: center;
-    width: 100%;
-}
-
 #name{
-    font-size: 38pt;
-    color: white;
-    font-family: Open Sans, sans-serif;
-    margin-bottom: 10px;
-    font-weight: lighter;
-    letter-spacing: 2pt;
     display: inline-block;
 }
 
 #info{
-    color: white;
-    font-style: italic;
-    font-family: Open Sans, sans-serif;
-    font-weight: 300;
     display: inline-block;
     margin-bottom: 10px;
+}
+
+#navigation{
+    top: 25%;
+    position: absolute;
+    text-align: center;
+    width: 100%;
 }
 
 #menu{
@@ -87,4 +87,63 @@ a:link.navLink, a:visited.navLink{
 
 a:link.navLink.last{
     border: none;
+}
+
+#about{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    margin: 0;
+}
+
+#sliderDiv{
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 5px;
+    position: absolute;
+    display: table;
+    background-color: #696969;
+}
+
+#slider{
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 98%; /* Full-width */
+    height: 15px; /* Specified height */
+    background: #fff; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+#sliderHeader{
+    margin: 0 0 10px;
+}
+
+#sliderLabel{
+    margin: 10px 0 0;
+}
+
+#slider:hover{
+    opacity: 1;
+}
+
+#slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+#slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
 }

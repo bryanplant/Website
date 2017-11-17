@@ -19,6 +19,8 @@ class Rocket implements Comparable<Rocket>{
   bool crashed = false;
   double closestDistance = double.MAX_FINITE; //closest distance to goal during iteration
   double completedTime;
+  double mutationRate = 0.01;
+  double crossoverRate = 0.99;
 
   //create new rocket
   Rocket(double x, double y, List<Vector2> dna){
@@ -46,11 +48,11 @@ class Rocket implements Comparable<Rocket>{
 
     //calculate fitness value for total distance
     if(dist < 1000)
-      fitness += (1000 - dist);
+      fitness += (1000 - dist)/10;
 
     //calculate fitness value for closest distance
     if(closestDistance < 1000)
-      fitness += .5*(1000 - closestDistance);
+      fitness += .5*((1000 - closestDistance)/10);
 
     //calculate fitness value for completing faster
     if(completed){

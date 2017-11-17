@@ -81,6 +81,8 @@ class RocketPopulation{
     for(int i = 0; i < size; i++){
       rockets[i].fitness = i.toDouble() + 1;
     }
+
+    rockets.last.fitness *= 2;
   }
 
   List<Rocket> select(){
@@ -109,16 +111,23 @@ class RocketPopulation{
       List<Vector2> dna1 = new List<Vector2>();
       List<Vector2> dna2 = new List<Vector2>();
 
-      int center = rand.nextInt(parent1.dna.length);
-      for(int i = 0; i < parent1.dna.length; i++){
-        if(i < center){
-          dna1.add(parent1.dna[i]);
-          dna2.add(parent2.dna[i]);
+      //crossover at parent1 crossover rate
+      if(rand.nextDouble() < parent1.crossoverRate) {
+        int center = rand.nextInt(parent1.dna.length);
+        for (int i = 0; i < parent1.dna.length; i++) {
+          if (i < center) {
+            dna1.add(parent1.dna[i]);
+            dna2.add(parent2.dna[i]);
+          }
+          else {
+            dna1.add(parent2.dna[i]);
+            dna2.add(parent1.dna[i]);
+          }
         }
-        else{
-          dna1.add(parent2.dna[i]);
-          dna2.add(parent1.dna[i]);
-        }
+      }
+      else{
+        dna1 = parent1.dna;
+        dna2 = parent2.dna;
       }
 
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
@@ -137,16 +146,25 @@ class RocketPopulation{
       Rocket parent2 = parents[rand.nextInt(parents.length-1)+1];
       List<Vector2> dna1 = new List<Vector2>();
       List<Vector2> dna2 = new List<Vector2>();
-      for (int i = 0; i < rockets[0].numGenes; i++) {
-        if(rand.nextInt(2) == 0){
-          dna1.add(parent1.dna[i]);
-          dna2.add(parent2.dna[i]);
-        }
-        else{
-          dna1.add(parent2.dna[i]);
-          dna2.add(parent1.dna[i]);
+
+      //crossover at parent1 crossover rate
+      if(rand.nextDouble() < parent1.crossoverRate) {
+        for (int i = 0; i < rockets[0].numGenes; i++) {
+          if (rand.nextInt(2) == 0) {
+            dna1.add(parent1.dna[i]);
+            dna2.add(parent2.dna[i]);
+          }
+          else {
+            dna1.add(parent2.dna[i]);
+            dna2.add(parent1.dna[i]);
+          }
         }
       }
+      else{
+        dna1 = parent1.dna;
+        dna2 = parent2.dna;
+      }
+
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
       parents.remove(parent1);
@@ -159,7 +177,7 @@ class RocketPopulation{
     List<Rocket> mutated = new List<Rocket>();
     for(Rocket r in population){
       for(int i = 0; i < r.numGenes; i++) {
-        if (rand.nextInt(r.numGenes) == 0) {
+        if (rand.nextDouble() < r.mutationRate) {
           r.dna[i] = r.randomGene();
         }
       }

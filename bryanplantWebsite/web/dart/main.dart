@@ -9,6 +9,8 @@ import 'package:vector_math/vector_math.dart';
 Random rand = new Random();
 CanvasElement canvas = querySelector("#canvas");        //HTML Canvas
 CanvasRenderingContext2D c2d = canvas.getContext('2d'); //CanvasRenderContext
+InputElement speedSlider = querySelector('#slider');  //HTML slider
+
 HtmlElement nameHeader = querySelector('#name');        //HTML obstacles
 HtmlElement infoHeader = querySelector('#info');
 HtmlElement menuHeader = querySelector('#menu');
@@ -24,18 +26,50 @@ RocketPopulation rockets = new RocketPopulation(50);  //rocket population
 int targetRadius = 35;  //radius of target
 Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of target
 
+Timer drawTimer;
+Timer updateTimer;
+int normalUpdateTime = 33;
+
 void main() {
-  initializeCanvas(); //initialize canvas and window listener
+  init(); //initialize canvas and window listener
   stars.init(canvas); //initialize star population
 
-  //update and draw approximately 30 times per second
-  new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
+  //initialize updateTimer
+  updateTimer = new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
     update();
+  });
+
+  //draw approximately 30 times per second
+  drawTimer = new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
     draw();
   });
 }
 
+void init(){
+  canvas.width = window.innerWidth;   //set width to width of browser window
+  canvas.height = window.innerHeight; //set height to height of browser window
 
+  //resize canvas and update target position when the browser window is resized
+  window.onResize.listen((e) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    target.x = canvas.width/2;
+    obstacles = [new Rectangle(nameHeader.parent.offsetLeft+nameHeader.offsetLeft, nameHeader.parent.offsetTop+nameHeader.offsetTop, nameHeader.clientWidth, nameHeader.clientHeight),
+    new Rectangle(infoHeader.parent.offsetLeft+infoHeader.offsetLeft, infoHeader.parent.offsetTop+infoHeader.offsetTop, infoHeader.clientWidth, infoHeader.clientHeight),
+    new Rectangle(menuHeader.parent.offsetLeft+menuHeader.offsetLeft, menuHeader.parent.offsetTop+menuHeader.offsetTop, menuHeader.clientWidth, menuHeader.clientHeight)];
+  });
+
+  speedSlider.onInput.listen((e) {
+    //update label
+    querySelector('#sliderLabel').text = 'Speed: ' + speedSlider.value;
+
+    //update updateTimer
+    updateTimer.cancel();
+    updateTimer = new Timer.periodic(new Duration(milliseconds: (normalUpdateTime~/double.parse(speedSlider.value))), (Timer t) {
+      update();
+    });
+  });
+}
 
 //updates stars and rockets
 void update() {
@@ -77,20 +111,7 @@ void draw(){
   c2d.fillText("Average Fitness of Last Generation: " + rockets.averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
 }
 
-void initializeCanvas(){
-  canvas.width = window.innerWidth;   //set width to width of browser window
-  canvas.height = window.innerHeight; //set height to height of browser window
 
-  //resize canvas and update target position when the browser window is resized
-  window.onResize.listen((e) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    target.x = canvas.width/2;
-    obstacles = [new Rectangle(nameHeader.parent.offsetLeft+nameHeader.offsetLeft, nameHeader.parent.offsetTop+nameHeader.offsetTop, nameHeader.clientWidth, nameHeader.clientHeight),
-    new Rectangle(infoHeader.parent.offsetLeft+infoHeader.offsetLeft, infoHeader.parent.offsetTop+infoHeader.offsetTop, infoHeader.clientWidth, infoHeader.clientHeight),
-    new Rectangle(menuHeader.parent.offsetLeft+menuHeader.offsetLeft, menuHeader.parent.offsetTop+menuHeader.offsetTop, menuHeader.clientWidth, menuHeader.clientHeight)];
-  });
-}
 
 
 
