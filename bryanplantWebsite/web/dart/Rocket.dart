@@ -9,7 +9,7 @@ class Rocket implements Comparable<Rocket>{
   Vector2 acc;  //vector containing acceleration of star
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
-  int numGenes = 65;   //how many genes in DNA
+  int numGenes = 40;   //how many genes in DNA
   int curGene = 0;    //what the next gene is
   int nextGeneTime = 10;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
@@ -29,10 +29,8 @@ class Rocket implements Comparable<Rocket>{
     height = 40;
     if(dna == null) {
       this.dna = new List<Vector2>(numGenes);
-      for (int i = 0; i < numGenes;
-      i++) { //set each gene to a random set of values
-        this.dna[i] = new Vector2(((rand.nextDouble() * 4) - 2) / 10,
-            ((rand.nextDouble() * 1.50) - 1) / 10);
+      for (int i = 0; i < numGenes; i++) { //set each gene to a random set of values
+        this.dna[i] = randomGene();
       }
     }
     else{
@@ -143,6 +141,10 @@ class Rocket implements Comparable<Rocket>{
     c2d.fill();
 
     c2d.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  Vector2 randomGene(){
+    return new Vector2((rand.nextDouble()*1.5)-.75, (rand.nextDouble()*1.5)-1);
   }
 
   int compareTo(Rocket that){

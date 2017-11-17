@@ -56,7 +56,7 @@ class RocketPopulation{
       calcFitness(target);
 
       List<Rocket> parents = select();
-      List<Rocket> offspring = centerCrossover(parents);
+      List<Rocket> offspring = uniformCrossover(parents);
       List<Rocket> newGen = mutate(offspring);
 
       rockets = newGen;
@@ -131,7 +131,8 @@ class RocketPopulation{
   }
 
   List<Rocket> uniformCrossover(List<Rocket> parents){
-    List<Rocket> offspring = new List<Rocket>(size);
+    List<Rocket> offspring = new List<Rocket>();
+
     while(!parents.isEmpty){
       Rocket parent1 = parents[0];
       Rocket parent2 = parents[rand.nextInt(parents.length-1)+1];
@@ -160,7 +161,7 @@ class RocketPopulation{
     for(Rocket r in population){
       for(int i = 0; i < r.numGenes; i++) {
         if (rand.nextInt(r.numGenes) == 0) {
-          r.dna[i] += new Vector2(rand.nextDouble()/20, rand.nextDouble()/20);
+          r.dna[i] = r.randomGene();
         }
       }
       mutated.add(r);
