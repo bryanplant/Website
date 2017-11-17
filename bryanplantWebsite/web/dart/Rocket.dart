@@ -1,6 +1,6 @@
 import 'dart:html';
 import 'dart:math';
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math.dart'; // ignore: uri_does_not_exist
 
 class Rocket implements Comparable<Rocket>{
   Random rand = new Random();
@@ -10,7 +10,7 @@ class Rocket implements Comparable<Rocket>{
   Vector2 grav; //vector to simulate gravity
   int width, height;   //width and height of rocket
   int numGenes = 65;   //how many genes in DNA
-  int nextGene = 0;    //what the next gene is
+  int curGene = 0;    //what the next gene is
   int nextGeneTime = 10;
   int nextGeneCounter = 0;  //determines if nextGene should be incremented
   List<Vector2> dna;
@@ -43,7 +43,7 @@ class Rocket implements Comparable<Rocket>{
   //calculate rocket's fitness based on distance to target
   void calculateFitness(Vector2 target){
     double dist = pos.distanceTo(target);
-    double distY = absoluteError(pos.y, target.y);
+    double distY = (pos.y-target.y).abs();
     fitness = 0.0;
 
     //calculate fitness value for total distance
@@ -76,12 +76,12 @@ class Rocket implements Comparable<Rocket>{
   void update(Vector2 target, int targetRadius, List<Rectangle> obstacles){
     if(!completed && pos.distanceTo(target) < targetRadius){
       completed = true;
-      completedTime = nextGene + 1/((nextGeneTime+1)-nextGeneCounter);
+      completedTime = curGene + 1/((nextGeneTime+1)-nextGeneCounter);
       pos = target.clone();
     }
 
     if(!completed && !crashed) {
-      acc.setFrom(dna.elementAt(nextGene)); //set acceleration based on gene
+      acc.setFrom(dna.elementAt(curGene)); //set acceleration based on gene
       acc.add(grav); //add gravity to acceleration vector
       vel.add(acc); //add acceleration to velocity vector
       if (vel.length > 5)
@@ -102,8 +102,8 @@ class Rocket implements Comparable<Rocket>{
 
     nextGeneCounter++;
     if (nextGeneCounter >= nextGeneTime) { //move to next gene
-      if (nextGene < dna.length - 1)
-        nextGene++;
+      if (curGene < dna.length - 1)
+        curGene++;
       nextGeneCounter = 0;
     }
   }

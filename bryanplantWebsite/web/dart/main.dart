@@ -1,4 +1,4 @@
-import 'Population.dart';
+import 'RocketPopulation.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
@@ -30,13 +30,10 @@ DateTime lastTime = new DateTime.now();                   //stores time since la
 List<StarColor> possibleColors = [new StarColor(155, 176, 255), new StarColor(170, 191, 255), new StarColor(202, 215, 255), new StarColor(248, 247, 255),
                                   new StarColor(255, 244, 234), new StarColor(255, 210, 161), new StarColor(255, 204, 111)];
 
-Population population = new Population(50);
+RocketPopulation rockets = new RocketPopulation(50);
 
 int targetRadius = 35;  //radius of target
 Vector2 target = new Vector2(canvas.width/2, 2.0*targetRadius); //location of target
-
-double maxFit = 0.0; //contains fitness for best rocket
-double averageFit = 0.0;
 
 void main() {
   canvas.width = window.innerWidth;   //set width to width of browser window
@@ -56,9 +53,6 @@ void main() {
   for(int i = 0; i < maxStars; i++){
     newStar(false);
   }
-
-  //create first generation of rockets
-  population = population.newGeneration();
 
   //update and draw approximately 60 times per second
   new Timer.periodic(new Duration(milliseconds: 17), (Timer t) {
@@ -122,17 +116,7 @@ void update() {
   }
 
   //update population
-  population.update(target, targetRadius, obstacles);
-
-  if(population.allDone){
-    population.calcFitness(target);
-    maxFit = population.maxFit;
-    averageFit = population.averageFit;
-    population = population.newGeneration();
-  }
-
-  //create new generation if rockets are out of genes
-
+  rockets.update(target, targetRadius, obstacles);
 }
 
 //draw everything to the canvas
@@ -159,14 +143,14 @@ void draw(){
   c2d.stroke();
   c2d.fill();
 
-  population.draw(c2d);
+  rockets.draw(c2d);
 
   c2d.font = "12px sans-serif";
   c2d.fillStyle = 'white';
   c2d.textAlign = 'left';
-  c2d.fillText("Generation Number: " + Population.genNum.toString(), 20, window.innerHeight-60);
-  c2d.fillText("Max Fitness of Last Generation:        " + maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
-  c2d.fillText("Average Fitness of Last Generation: " + averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
+  c2d.fillText("Generation Number: " + rockets.genNum.toString(), 20, window.innerHeight-60);
+  c2d.fillText("Max Fitness of Last Generation:        " + rockets.maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
+  c2d.fillText("Average Fitness of Last Generation: " + rockets.averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
 }
 
 
