@@ -4,17 +4,18 @@ import 'dart:html';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 
-class Population{
+class RocketPopulation{
   Random rand = new Random();
   List<Rocket> rockets = new List<Rocket>();
   int size;
-  static int genNum = 0;
+  int genNum = 0;
   double maxFit = 0.0;
   double averageFit = 0.0;
   bool allDone;
 
-  Population(int size){
+  RocketPopulation(int size){
     this.size = size;
+    newGeneration();
   }
 
   void add(Rocket rocket){
@@ -29,8 +30,13 @@ class Population{
         allDone = false;
       }
     }
-    if(rockets[0].nextGene == rockets[0].numGenes-1)
+
+    if(rockets[0].curGene == rockets[0].numGenes-1)
       allDone = true;
+
+    if(allDone){
+      newGeneration(target);
+    }
   }
 
   void draw(CanvasRenderingContext2D c2d){
@@ -39,21 +45,21 @@ class Population{
     }
   }
 
-  Population newGeneration() {
+  void newGeneration([Vector2 target]) {
     genNum++;
-    Population newGen = new Population(this.size);
-    if (this.rockets.length == 0) {
+    if (rockets.length == 0) {
       for (int i = 0; i < size; i ++) {
-        newGen.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), null));
+        rockets.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), null));
       }
-      return newGen;
     }
     else {
-      newGen = select();
-      newGen = centerCrossover(newGen);
-      newGen = mutate(newGen);
+      calcFitness(target);
 
-      return newGen;
+      List<Rocket> parents = select();
+      List<Rocket> offspring = uniformCrossover(parents);
+      List<Rocket> newGen = mutate(offspring);
+
+      rockets = newGen;
     }
   }
 
@@ -75,12 +81,11 @@ class Population{
     for(int i = 0; i < size; i++){
       rockets[i].fitness = i.toDouble() + 1;
     }
-    rockets[size-1].fitness *= 2;
   }
 
-  Population select(){
+  List<Rocket> select(){
     //find the max fitness value
-    Population parents = new Population(size);
+    List<Rocket> parents = new List<Rocket>();
     List<Rocket> pool = new List<Rocket>();
     for(int i = 0; i < size; i++){
       for(int j = 0; j < rockets[i].fitness.toInt(); j++){
@@ -95,11 +100,12 @@ class Population{
     return parents;
   }
 
-  Population centerCrossover(Population parents){
-    Population offspring = new Population(size);
-    while(!parents.rockets.isEmpty){
-      Rocket parent1 = parents.rockets[0];
-      Rocket parent2 = parents.rockets[rand.nextInt(parents.rockets.length-1)+1];
+  List<Rocket> centerCrossover(List<Rocket> parents){
+    List<Rocket> offspring = new List<Rocket>();
+
+    while(!parents.isEmpty){
+      Rocket parent1 = parents[0];
+      Rocket parent2 = parents[rand.nextInt(parents.length-1)+1];
       List<Vector2> dna1 = new List<Vector2>();
       List<Vector2> dna2 = new List<Vector2>();
 
@@ -117,17 +123,18 @@ class Population{
 
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
-      parents.rockets.remove(parent1);
-      parents.rockets.remove(parent2);
+      parents.remove(parent1);
+      parents.remove(parent2);
     }
     return offspring;
   }
 
-  Population uniformCrossover(Population parents){
-    Population offspring = new Population(size);
-    while(!parents.rockets.isEmpty){
-      Rocket parent1 = parents.rockets[0];
-      Rocket parent2 = parents.rockets[rand.nextInt(parents.rockets.length-1)+1];
+  List<Rocket> uniformCrossover(List<Rocket> parents){
+    List<Rocket> offspring = new List<Rocket>();
+
+    while(!parents.isEmpty){
+      Rocket parent1 = parents[0];
+      Rocket parent2 = parents[rand.nextInt(parents.length-1)+1];
       List<Vector2> dna1 = new List<Vector2>();
       List<Vector2> dna2 = new List<Vector2>();
       for (int i = 0; i < rockets[0].numGenes; i++) {
@@ -142,18 +149,18 @@ class Population{
       }
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
       offspring.add(new Rocket(window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
-      parents.rockets.remove(parent1);
-      parents.rockets.remove(parent2);
+      parents.remove(parent1);
+      parents.remove(parent2);
     }
     return offspring;
   }
 
-  Population mutate(Population population){
-    Population mutated = new Population(size);
-    for(Rocket r in population.rockets){
+  List<Rocket> mutate(List<Rocket> population){
+    List<Rocket> mutated = new List<Rocket>();
+    for(Rocket r in population){
       for(int i = 0; i < r.numGenes; i++) {
         if (rand.nextInt(r.numGenes) == 0) {
-          r.dna[i] += new Vector2(rand.nextDouble()/20, rand.nextDouble()/20);
+          r.dna[i] = r.randomGene();
         }
       }
       mutated.add(r);
