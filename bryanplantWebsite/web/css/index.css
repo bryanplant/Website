@@ -105,26 +105,19 @@ a:link.navLink.last{
     position: absolute;
     display: table;
     background-color: #696969;
+    width: 200px;
 }
 
 #slider{
-    -webkit-appearance: none;  /* Override default CSS styles */
+    -webkit-appearance: none;
     appearance: none;
-    width: 98%; /* Full-width */
-    height: 15px; /* Specified height */
-    background: #fff; /* Grey background */
-    outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    width: 190px;
+    height: 15px;
+    background: #fff; /
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
     transition: opacity .2s;
-}
-
-#sliderHeader{
-    margin: 0 0 10px;
-}
-
-#sliderLabel{
-    margin: 10px 0 0;
 }
 
 #slider:hover{
@@ -146,4 +139,19 @@ a:link.navLink.last{
     height: 25px; /* Slider handle height */
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
+}
+
+#slider::-ms-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+#sliderHeader{
+    margin: 0 0 10px;
+}
+
+#sliderLabel{
+    margin: 10px 0 0;
 }
