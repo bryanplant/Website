@@ -106,6 +106,7 @@ a:link.navLink.last{
     display: table;
     background-color: #696969;
     width: 200px;
+    text-align: center;
 }
 
 #slider{
