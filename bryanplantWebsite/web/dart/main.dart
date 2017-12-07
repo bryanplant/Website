@@ -40,9 +40,10 @@ void main() {
   });
 
   //draw approximately 30 times per second
-  drawTimer = new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
+  window.animationFrame.then(draw);
+  /*drawTimer = new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
     draw();
-  });
+  });*/
 }
 
 void init(){
@@ -78,7 +79,7 @@ void update() {
 }
 
 //draw everything to the canvas
-void draw(){
+draw(num delta){
   c2d.clearRect(0, 0, window.innerWidth, window.innerHeight); //clear screen
 
   stars.draw(c2d); //draw stars
@@ -109,6 +110,8 @@ void draw(){
   c2d.fillText("Generation Number: " + rockets.genNum.toString(), 20, window.innerHeight-60);
   c2d.fillText("Max Fitness of Last Generation:        " + rockets.maxFit.toStringAsFixed(4), 20, window.innerHeight-40);
   c2d.fillText("Average Fitness of Last Generation: " + rockets.averageFit.toStringAsFixed(4), 20, window.innerHeight-20);
+
+  window.animationFrame.then(draw);
 }
 
 
