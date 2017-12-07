@@ -39,11 +39,8 @@ void main() {
     update();
   });
 
-  //draw approximately 30 times per second
+  //draw to screen on animation frame
   window.animationFrame.then(draw);
-  /*drawTimer = new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
-    draw();
-  });*/
 }
 
 void init(){
@@ -60,15 +57,25 @@ void init(){
     new Rectangle(menuHeader.parent.offsetLeft+menuHeader.offsetLeft, menuHeader.parent.offsetTop+menuHeader.offsetTop, menuHeader.clientWidth, menuHeader.clientHeight)];
   });
 
-  speedSlider.onInput.listen((e) {
-    //update label
-    querySelector('#sliderLabel').text = 'Speed: ' + speedSlider.value;
+  speedSlider.onMouseMove.listen((e){
+    var speed = speedSlider.value;
+    var label = querySelector('#sliderLabel');
 
-    //update updateTimer
-    updateTimer.cancel();
-    updateTimer = new Timer.periodic(new Duration(milliseconds: (normalUpdateTime~/double.parse(speedSlider.value))), (Timer t) {
-      update();
-    });
+    if(double.parse(speed) != double.parse(label.text.substring(6))){//check if there has been a change
+      print("not equal");
+      print(label.text.substring(7));
+      print(speed);
+      //update label
+      label.text = 'Speed: ' + speed;
+
+      //update updateTimer
+      updateTimer.cancel();
+      updateTimer = new Timer.periodic(new Duration(
+          milliseconds: (normalUpdateTime ~/
+              double.parse(speedSlider.value))), (Timer t) {
+        update();
+      });
+    }
   });
 }
 
