@@ -5,10 +5,30 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110934455-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-110934455-1');
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "Rockets Genetic Algorithm",
+        "keywords": "personal,opensource",
+        "url": "http://www.bryanplant.com",
+        "creator": {
+        "@type": "Person",
+        "name": "Bryan Plant",
+        "url": "http://www.bryanplant.com"
+        },
+        "description": "Genetic algorithm used to train rockets to hit a target. Coded with HTML, CSS and Dart."
+    }
     </script>
 
     <meta charset="utf-8">
