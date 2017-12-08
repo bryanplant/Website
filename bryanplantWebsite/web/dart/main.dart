@@ -41,14 +41,26 @@ void init() {
   infoHeader = querySelector('#info');
   menuHeader = querySelector('#menu');
 
+  canvas.width = window.innerWidth; //set width to width of browser window
+  canvas.height = window.innerHeight; //set height to height of browser window
+
   stars = new StarPopulation(20);
   rockets = new RocketPopulation(50);
 
+  obstacles = [new Rectangle(
+      nameHeader.parent.offsetLeft + nameHeader.offsetLeft,
+      nameHeader.parent.offsetTop + nameHeader.offsetTop,
+      nameHeader.clientWidth, nameHeader.clientHeight),
+  new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
+      infoHeader.parent.offsetTop + infoHeader.offsetTop,
+      infoHeader.clientWidth, infoHeader.clientHeight),
+  new Rectangle(menuHeader.parent.offsetLeft + menuHeader.offsetLeft,
+      menuHeader.parent.offsetTop + menuHeader.offsetTop,
+      menuHeader.clientWidth, menuHeader.clientHeight)
+  ];
+
   targetRadius = 35;
   target = new Vector2(canvas.width / 2, 2.0 * targetRadius);
-
-  canvas.width = window.innerWidth; //set width to width of browser window
-  canvas.height = window.innerHeight; //set height to height of browser window
 
   normalUpdateTime = 33;
 
@@ -57,7 +69,28 @@ void init() {
     update();
   });
 
+  //detect slider change
   speedSlider.onMouseMove.listen((e) {
+    var speed = speedSlider.value;
+    var label = querySelector('#sliderLabel');
+
+    if (double.parse(speed) != double.parse(
+        label.text.substring(6))) { //check if there has been a change
+      //update label
+      label.text = 'Speed: ' + speed;
+
+      //update updateTimer
+      updateTimer.cancel();
+      updateTimer = new Timer.periodic(new Duration(
+          milliseconds: (normalUpdateTime ~/
+              double.parse(speedSlider.value))), (Timer t) {
+        update();
+      });
+    }
+  });
+
+  //detect slider change for IE
+  speedSlider.onInput.listen((e) {
     var speed = speedSlider.value;
     var label = querySelector('#sliderLabel');
 
