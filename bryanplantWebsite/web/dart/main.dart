@@ -163,7 +163,7 @@ draw(num delta) {
   rockets.draw(c2d); //draw rockets
 
   //draw text info about population
-  c2d.font = "12px sans-serif";
+  c2d.font = "10pt sans-serif";
   c2d.fillStyle = 'white';
   c2d.textAlign = 'left';
   c2d.fillText("Generation Number: " + rockets.genNum.toString(), 20,
