@@ -1,5 +1,4 @@
-.idea/
-bryanplantWebsite/.idea
+/.idea
 bryanplantWebsite/build
 bryanplantWebsite/.pub
 bryanplantWebsite/.packages
