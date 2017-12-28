@@ -39,7 +39,7 @@ body {
 }
 
 #navBar a:link, #navBar a:visited {
-    font-family: sans-serif;
+    font-family: Open Sans, sans-serif;
     letter-spacing: 2pt;
     font-size: 12pt;
     text-decoration: none;
