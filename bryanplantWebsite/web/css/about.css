@@ -72,10 +72,10 @@ body {
 }
 
 .info {
-    text-align: center;
+    text-align: left;
     font-family: 'Slabo 13px', serif;
     font-size: 12pt;
-    color: white;
+    color: black;
     max-width: 600px;
     margin: 0 auto 20px;
 }
