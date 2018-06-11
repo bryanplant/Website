@@ -6,12 +6,10 @@ html, body {
 }
 
 body {
-    background: #E0A665;
-    background-image: -webkit-radial-gradient(closest-corner, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.2)), -webkit-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: -moz-radial-gradient(closest-corner, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.2)), -moz-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: -o-radial-gradient(closest-corner, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.2)), -o-linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-image: radial-gradient(closest-corner, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.2)), linear-gradient(160deg, #0F1B58, #0F1B58 10%, #E0A665 90%);
-    background-attachment: fixed;
+    height: 100%;
+
+    background: url("../resources/background.jpg") no-repeat center;
+    background-size: cover;
 }
 
 #canvas {
@@ -23,7 +21,8 @@ body {
 #wrapper {
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.65)
 }
 
 #navigation {
@@ -73,13 +72,13 @@ body {
 
 .info {
     text-align: left;
-    font-family: 'Slabo 13px', serif;
-    font-size: 12pt;
-    color: black;
+    font-family: Open Sans, sans-serif;
+    font-size: 13pt;
+    color: white;
     max-width: 600px;
     margin: 0 auto 20px;
 }
 
 a:visited.pLink, a:link.pLink {
-    color: #0F1B58;
+    color: lightblue;
 }
