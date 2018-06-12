@@ -1,73 +1,16 @@
-html, body {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-}
-
 body {
-    height: 100%;
-
     background: url("../resources/background.jpg") no-repeat center;
     background-size: cover;
 }
 
-#canvas {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-}
-
 #wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
     background-color: rgba(0, 0, 0, 0.65)
-}
-
-#navigation {
-    top: 50px;
-    position: relative;
-    text-align: center;
-    width: 100%;
-}
-
-#navBar {
-    list-style: none;
-    display: inline-block;
-}
-
-#navBar a:link, #navBar a:visited {
-    font-family: Open Sans, sans-serif;
-    letter-spacing: 2pt;
-    font-size: 12pt;
-    text-decoration: none;
-    color: white;
-    border-right: 3px solid;
-    padding-right: 4px;
-    padding-left: 2px;
-}
-
-#navBar a:link.last {
-    border: none;
-}
-
-#content {
-    position: relative;
-    text-align: center;
-    width: 100%;
 }
 
 #image {
     margin: 0 auto;
     border: 5px solid;
     display: block;
-}
-
-#header {
-    margin-top: 75px;
-    color: white;
-    text-align: center;
 }
 
 .info {

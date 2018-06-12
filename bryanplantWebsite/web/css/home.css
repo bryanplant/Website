@@ -1,73 +1,15 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
 body {
-    height: 100%;
-
     background: url("../resources/background.jpg") no-repeat center;
     background-size: cover;
 }
 
-h1 {
-    font-size: 42pt;
-    color: white;
-    font-family: Open Sans, sans-serif;
-    margin-bottom: 10px;
-    font-weight: bolder;
-    letter-spacing: 2pt;
-}
-
-h2 {
-    color: white;
-    font-style: italic;
-    font-family: Open Sans, sans-serif;
-    font-weight: 300;
-}
-
-h3 {
-    font-size: 12pt;
-    color: white;
-    font-family: Open Sans, sans-serif;
-    font-weight: 300;
-}
-
-#canvas {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-}
-
 #wrapper {
-    height: 100%;
-    width: 100%;
-    margin: 0 auto;
     background-color: rgba(0, 0, 0, 0.65)
 }
 
-#name {
-    display: inline-block;
-}
-
 #info {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-#navigation {
-    top: 5%;
-    position: relative;
     text-align: center;
-    width: 100%;
-}
-
-#menu {
-    list-style: none;
-    display: inline-block;
+    margin-bottom: 10px;
 }
 
 #projects {
@@ -123,19 +65,4 @@ h3 {
 
 a:link.imageLink, a:visited.imageLink {
     color: black;
-}
-
-a:link.navLink, a:visited.navLink {
-    font-family: Open Sans, sans-serif;
-    letter-spacing: 2pt;
-    font-size: 12pt;
-    text-decoration: none;
-    color: white;
-    border-right: 3px solid;
-    padding-right: 4px;
-    padding-left: 2px;
-}
-
-a:link.navLink.last {
-    border: none;
 }
