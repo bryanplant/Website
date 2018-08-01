@@ -13,7 +13,7 @@ InputElement speedSlider; //HTML slider
 
 HtmlElement nameHeader; //HTML obstacles
 HtmlElement infoHeader;
-HtmlElement menuHeader;
+HtmlElement navBarHeader;
 
 List<Rectangle> obstacles; //rectangles associated with HTML obstacles
 
@@ -39,7 +39,7 @@ void init() {
   speedSlider = querySelector('#slider');
   nameHeader = querySelector('#name');
   infoHeader = querySelector('#info');
-  menuHeader = querySelector('#menu');
+  navBarHeader = querySelector('#navBar');
 
   canvas.width = window.innerWidth; //set width to width of browser window
   canvas.height = window.innerHeight; //set height to height of browser window
@@ -54,9 +54,9 @@ void init() {
   new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
       infoHeader.parent.offsetTop + infoHeader.offsetTop,
       infoHeader.clientWidth, infoHeader.clientHeight),
-  new Rectangle(menuHeader.parent.offsetLeft + menuHeader.offsetLeft,
-      menuHeader.parent.offsetTop + menuHeader.offsetTop,
-      menuHeader.clientWidth, menuHeader.clientHeight)
+  new Rectangle(navBarHeader.parent.offsetLeft + navBarHeader.offsetLeft,
+      navBarHeader.parent.offsetTop + navBarHeader.offsetTop,
+      navBarHeader.clientWidth, navBarHeader.clientHeight)
   ];
 
   targetRadius = 35;
@@ -121,9 +121,9 @@ void init() {
     new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
         infoHeader.parent.offsetTop + infoHeader.offsetTop,
         infoHeader.clientWidth, infoHeader.clientHeight),
-    new Rectangle(menuHeader.parent.offsetLeft + menuHeader.offsetLeft,
-        menuHeader.parent.offsetTop + menuHeader.offsetTop,
-        menuHeader.clientWidth, menuHeader.clientHeight)
+    new Rectangle(navBarHeader.parent.offsetLeft + navBarHeader.offsetLeft,
+        navBarHeader.parent.offsetTop + navBarHeader.offsetTop,
+        navBarHeader.clientWidth, navBarHeader.clientHeight)
     ];
   });
 

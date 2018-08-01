@@ -1,0 +1,74 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+h1 {
+    font-size: 42pt;
+    color: white;
+    font-family: Open Sans, sans-serif;
+    margin-bottom: 10px;
+    font-weight: 400;
+    letter-spacing: 2pt;
+}
+
+h2 {
+    font-size: 18pt;
+    color: white;
+    font-style: italic;
+    font-family: Open Sans, sans-serif;
+    font-weight: 300;
+}
+
+h3 {
+    font-size: 12pt;
+    color: white;
+    font-family: Open Sans, sans-serif;
+    font-weight: 300;
+}
+
+#wrapper {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#canvas {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+#header {
+    padding-top: 35px;
+    text-align: center;
+}
+
+#navigation {
+    top: 50px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+#navBar {
+    list-style: none;
+    display: inline-block;
+}
+
+#navBar a:link, #navBar a:visited {
+    font-family: Open Sans, sans-serif;
+    letter-spacing: 2pt;
+    font-size: 12pt;
+    text-decoration: none;
+    color: white;
+    border-right: 3px solid;
+    padding-right: 4px;
+    padding-left: 2px;
+}
+
+#navBar a:link.last {
+    border: none;
+}

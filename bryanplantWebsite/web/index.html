@@ -1,70 +1,38 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110934455-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', 'UA-110934455-1');
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "SoftwareSourceCode",
-        "name": "Rockets Genetic Algorithm",
-        "keywords": "personal,opensource",
-        "url": "http://www.bryanplant.com",
-        "creator": {
-        "@type": "Person",
-        "name": "Bryan Plant",
-        "url": "http://www.bryanplant.com"
-        },
-        "description": "Genetic algorithm used to train rockets to hit a target. Coded with HTML, CSS and Dart."
-    }
-    </script>
-
-    <meta charset="utf-8">
-
+    <meta charset="UTF-8">
     <title>Bryan Plant</title>
 
-    <link href="css/index.css" rel="stylesheet" type="text/css">
+    <link href="css/global.css" rel="stylesheet" type="text/css">
+    <link href="css/home.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-
-
-    <script defer src="dart/main.dart" type="application/dart"></script>
-    <script defer src="packages/browser/dart.js"></script>
 </head>
-
 <body>
-<canvas id="canvas"></canvas>
 <div id="wrapper">
-    <div id="sliderDiv">
-        <h3 id="sliderHeader">Adjust Simulation Speed</h3>
-        <input id="slider" type="range" min="1" max="5" value="1" step="0.5"/>
-        <h3 id="sliderLabel">Speed: 1</h3>
-    </div>
     <div id="navigation">
-        <h1 id="name">Bryan Plant</h1><br>
-        <h2 id="info">Computer science student<br>Montana State University</h2><br>
-
-        <li id="menu">
+        <li id="navBar">
+            <a class="navLink" href="./">Home</a>
             <a class="navLink" href="about">About</a>
             <a class="navLink" href="https://github.com/bryanplant" target="_blank">Github</a>
             <a class="navLink last" href="resources/resume.pdf" target="_blank">Resume</a>
         </li>
     </div>
-    <h3 id="about">Genetic algorithm used to train rockets to hit a target.<br>
-        Coded with HTML, CSS and Dart.
-        <a href="https://github.com/bryanplant/Website" target="_blank">See this project on Github</a></h3>
+    <div id="header">
+        <h1>Bryan Plant</h1>
+        <h2>Computer science student<br>Montana State University</h2>
+    </div>
+    <div id="projects">
+        <h2 id="projectHeader">Web Projects</h2>
+        <div class="imageDiv">
+            <a class="imageLink" href="genetic-rockets">
+                <img class="image" src="resources/rockets-pic2.png"><br>
+                <div class="overlay">
+                    <div class="overlayText">Genetic Rockets</div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

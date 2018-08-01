@@ -1,0 +1,68 @@
+body {
+    background: url("../resources/background.jpg") no-repeat center;
+    background-size: cover;
+}
+
+#wrapper {
+    background-color: rgba(0, 0, 0, 0.65)
+}
+
+#info {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#projects {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    width: 50%;
+    text-align: center;
+}
+
+.imageDiv {
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.image {
+    border: 5px solid white;
+    width: 190px;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: steelblue;
+}
+
+.imageDiv:hover .overlay {
+    opacity: 1;
+}
+
+.overlayText {
+    color: white;
+    font-family: Open Sans, sans-serif;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+a:link.imageLink, a:visited.imageLink {
+    color: black;
+}
