@@ -146,17 +146,17 @@ draw(num delta) {
   //draw target
   c2d.fillStyle = 'red';
   c2d.beginPath();
-  c2d.arc(target.x, target.y, targetRadius, 0, 2 * PI);
+  c2d.arc(target.x, target.y, targetRadius, 0, 2 * pi);
   c2d.stroke();
   c2d.fill();
   c2d.fillStyle = 'white';
   c2d.beginPath();
-  c2d.arc(target.x, target.y, targetRadius / 1.5, 0, 2 * PI);
+  c2d.arc(target.x, target.y, targetRadius / 1.5, 0, 2 * pi);
   c2d.stroke();
   c2d.fill();
   c2d.fillStyle = 'red';
   c2d.beginPath();
-  c2d.arc(target.x, target.y, targetRadius / 4, 0, 2 * PI);
+  c2d.arc(target.x, target.y, targetRadius / 4, 0, 2 * pi);
   c2d.stroke();
   c2d.fill();
 

@@ -17,8 +17,8 @@ class Rocket implements Comparable<Rocket> {
   double fitness; //rocket's fitness
   bool completed = false;
   bool crashed = false;
-  double closestDistance = double
-      .MAX_FINITE; //closest distance to goal during iteration
+  double closestDistance =
+      double.maxFinite; //closest distance to goal during iteration
   double completedTime;
   double mutationRate = 0.01;
   double crossoverRate = 0.99;
@@ -33,12 +33,11 @@ class Rocket implements Comparable<Rocket> {
     height = 40;
     if (dna == null) {
       this.dna = new List<Vector2>(numGenes);
-      for (int i = 0; i < numGenes;
-      i++) { //set each gene to a random set of values
+      for (int i = 0; i < numGenes; i++) {
+        //set each gene to a random set of values
         this.dna[i] = randomGene();
       }
-    }
-    else {
+    } else {
       this.dna = dna;
     }
   }
@@ -49,12 +48,10 @@ class Rocket implements Comparable<Rocket> {
     fitness = 0.0;
 
     //calculate fitness value for total distance
-    if (dist < 1000)
-      fitness += (1000 - dist) / 10;
+    if (dist < 1000) fitness += (1000 - dist) / 10;
 
     //calculate fitness value for closest distance
-    if (closestDistance < 1000)
-      fitness += .5 * ((1000 - closestDistance) / 10);
+    if (closestDistance < 1000) fitness += .5 * ((1000 - closestDistance) / 10);
 
     //calculate fitness value for completing faster
     if (completed) {
@@ -88,7 +85,9 @@ class Rocket implements Comparable<Rocket> {
       }
 
       //check if collided with window edges
-      if (pos.y > window.innerHeight || pos.y < 0 || pos.x < 0 ||
+      if (pos.y > window.innerHeight ||
+          pos.y < 0 ||
+          pos.x < 0 ||
           pos.x > window.innerWidth) {
         crashed = true;
       }
@@ -99,9 +98,9 @@ class Rocket implements Comparable<Rocket> {
     }
 
     nextGeneCounter++;
-    if (nextGeneCounter >= nextGeneTime) { //move to next gene
-      if (curGene < dna.length - 1)
-        curGene++;
+    if (nextGeneCounter >= nextGeneTime) {
+      //move to next gene
+      if (curGene < dna.length - 1) curGene++;
       nextGeneCounter = 0;
     }
   }
@@ -111,7 +110,7 @@ class Rocket implements Comparable<Rocket> {
     c2d.translate(pos.x, pos.y);
     Vector2 heading = vel.normalized();
     double angle = atan2(heading.y, heading.x);
-    c2d.rotate(angle + PI / 2);
+    c2d.rotate(angle + pi / 2);
 
     c2d.fillStyle = 'rgba(255, 255, 255, 0.5)';
     c2d.beginPath();
@@ -148,8 +147,7 @@ class Rocket implements Comparable<Rocket> {
   }
 
   int compareTo(Rocket that) {
-    if (this.fitness < that.fitness)
-      return -1;
+    if (this.fitness < that.fitness) return -1;
     return 1;
   }
 }

@@ -1,10 +1,11 @@
 {
   "hosting": {
-    "public": "build/web",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "cleanUrls": true
   }
 }
