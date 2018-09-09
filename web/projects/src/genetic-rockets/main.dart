@@ -1,5 +1,5 @@
-import 'RocketPopulation.dart';
-import 'StarPopulation.dart';
+import 'rocket_population.dart';
+import 'star_population.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
@@ -7,29 +7,28 @@ import 'package:vector_math/vector_math.dart';
 
 
 Random rand;
-CanvasElement canvas; //HTML Canvas
-CanvasRenderingContext2D c2d; //CanvasRenderContext
-InputElement speedSlider; //HTML slider
+CanvasElement canvas;
+CanvasRenderingContext2D c2d;
+InputElement speedSlider;
 
-HtmlElement nameHeader; //HTML obstacles
+ //HTML obstacles
+HtmlElement nameHeader;
 HtmlElement infoHeader;
-HtmlElement navBarHeader;
+List<Rectangle> obstacles;
 
-List<Rectangle> obstacles; //rectangles associated with HTML obstacles
+StarPopulation stars;
+RocketPopulation rockets;
 
-StarPopulation stars; //star population
-RocketPopulation rockets; //rocket population
-
-int targetRadius; //radius of target
-Vector2 target; //location of target
+int targetRadius;
+Vector2 target;
 
 Timer drawTimer;
 Timer updateTimer;
 int normalUpdateTime;
 
 void main() {
-  init(); //initialize canvas and window listener
-  stars.init(canvas); //initialize star population
+  init();
+  stars.init(canvas);
 }
 
 void init() {
@@ -39,10 +38,9 @@ void init() {
   speedSlider = querySelector('#slider');
   nameHeader = querySelector('#name');
   infoHeader = querySelector('#info');
-  navBarHeader = querySelector('#navBar');
 
-  canvas.width = window.innerWidth; //set width to width of browser window
-  canvas.height = window.innerHeight; //set height to height of browser window
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
   stars = new StarPopulation(20);
   rockets = new RocketPopulation(50);
@@ -55,9 +53,6 @@ void init() {
     new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
       infoHeader.parent.offsetTop + infoHeader.offsetTop,
       infoHeader.clientWidth, infoHeader.clientHeight),
-    new Rectangle(navBarHeader.parent.offsetLeft + navBarHeader.offsetLeft,
-      navBarHeader.parent.offsetTop + navBarHeader.offsetTop,
-      navBarHeader.clientWidth, navBarHeader.clientHeight)
   ];
 
   targetRadius = 35;
@@ -76,8 +71,7 @@ void init() {
     var label = querySelector('#sliderLabel');
 
     if (double.parse(speed) != double.parse(
-        label.text.substring(6))) { //check if there has been a change
-      //update label
+        label.text.substring(6))) {
       label.text = 'Speed: ' + speed;
 
       //update updateTimer
@@ -96,8 +90,7 @@ void init() {
     var label = querySelector('#sliderLabel');
 
     if (double.parse(speed) != double.parse(
-        label.text.substring(6))) { //check if there has been a change
-      //update label
+        label.text.substring(6))) {
       label.text = 'Speed: ' + speed;
 
       //update updateTimer
@@ -122,9 +115,6 @@ void init() {
     new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
         infoHeader.parent.offsetTop + infoHeader.offsetTop,
         infoHeader.clientWidth, infoHeader.clientHeight),
-    new Rectangle(navBarHeader.parent.offsetLeft + navBarHeader.offsetLeft,
-        navBarHeader.parent.offsetTop + navBarHeader.offsetTop,
-        navBarHeader.clientWidth, navBarHeader.clientHeight)
     ];
   });
 
@@ -134,15 +124,15 @@ void init() {
 
 //updates stars and rockets
 void update() {
-  stars.update(canvas); //update stars
-  rockets.update(target, targetRadius, obstacles); //update rockets
+  stars.update(canvas);
+  rockets.update(target, targetRadius, obstacles);
 }
 
 //draw everything to the canvas
 draw(num delta) {
-  c2d.clearRect(0, 0, window.innerWidth, window.innerHeight); //clear screen
+  c2d.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-  stars.draw(c2d); //draw stars
+  stars.draw(c2d);
 
   //draw target
   c2d.fillStyle = 'red';
@@ -161,7 +151,7 @@ draw(num delta) {
   c2d.stroke();
   c2d.fill();
 
-  rockets.draw(c2d); //draw rockets
+  rockets.draw(c2d);
 
   //draw text info about population
   c2d.font = "10pt sans-serif";

@@ -9,20 +9,21 @@ CanvasElement canvas; //HTML Canvas
 CanvasRenderingContext2D c2d; //CanvasRenderContext
 Timer updateTimer;
 
-double x, y;
+Vector2 pos;
+Vector2 vel;
 
 void main() {
   init(); //initialize canvas and window listener
 }
 
 void init() {
-  x = 250.0;
-  y = 1000.0;
-
   canvas = querySelector("#canvas");
   c2d = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+
+  pos = new Vector2(canvas.width / 2, 1000.0);
+  vel = new Vector2(0.0, -5.0);
 
   updateTimer = new Timer.periodic(new Duration(milliseconds: 33), (Timer t) {
     update();
@@ -34,11 +35,30 @@ void init() {
     canvas.height = window.innerHeight;
   });
 
+  window.onKeyDown.listen(handleKeypress);
+
   window.animationFrame.then(draw);
 }
 
 void update() {
-  y -= 10;
+  pos += vel;
+}
+
+void handleKeypress(KeyboardEvent e) {
+  switch(e.keyCode) {
+    case KeyCode.RIGHT:
+      vel.x = 5.0;
+      break;
+    case KeyCode.DOWN:
+      vel.y = 5.0;
+      break;
+    case KeyCode.LEFT:
+      vel.x = -5.0;
+      break;
+    case KeyCode.UP:
+      vel.y = -5.0;
+      break;
+  }
 }
 
 draw(num delta) {
@@ -47,7 +67,10 @@ draw(num delta) {
   double width = 15.0;
   double height = 40.0;
 
-  c2d.translate(x, y);
+  c2d.translate(pos.x, pos.y);
+  Vector2 heading = vel.normalized();
+  double angle = atan2(heading.y, heading.x);
+  c2d.rotate(angle + pi / 2);
 
   c2d.fillStyle = 'rgba(255, 255, 255, 0.5)';
   c2d.beginPath();
@@ -80,8 +103,3 @@ draw(num delta) {
 
   window.animationFrame.then(draw);
 }
-
-
-
-
-

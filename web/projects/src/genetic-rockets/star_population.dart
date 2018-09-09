@@ -1,19 +1,19 @@
-import 'Star.dart';
-import 'StarColor.dart';
+import 'star.dart';
+import 'star_color.dart';
 import 'dart:collection';
 import 'dart:html';
 import 'dart:math';
 
 class StarPopulation {
   Random rand;
-  Queue stars; //contains star objects
-  int maxStars; //max number of stars to be on screen
+  Queue stars;
+  int maxStars;
 
   Duration newStarTimer; //how long until a new star should be created
   DateTime lastTime = new DateTime.now(); //stores time since last update
 
 
-  List<StarColor> possibleColors; //list of colors that stars can be
+  List<StarColor> possibleColors;
 
   StarPopulation(int maxStars) {
     stars = new Queue();

@@ -1,4 +1,4 @@
-import 'Rocket.dart';
+import 'rocket.dart';
 import 'dart:html';
 
 import 'dart:math';

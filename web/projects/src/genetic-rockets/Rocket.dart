@@ -4,17 +4,17 @@ import 'package:vector_math/vector_math.dart';
 
 class Rocket implements Comparable<Rocket> {
   Random rand = new Random();
-  Vector2 pos; //vector containing position of star
-  Vector2 vel; //vector containing velocity of star
-  Vector2 acc; //vector containing acceleration of star
-  Vector2 grav; //vector to simulate gravity
-  int width, height; //width and height of rocket
-  int numGenes = 100; //how many genes in DNA
-  int curGene = 0; //what the next gene is
+  Vector2 pos;
+  Vector2 vel;
+  Vector2 acc;
+  Vector2 grav;
+  int width, height;
+  int numGenes = 100;
+  int curGene = 0;
   int nextGeneTime = 3;
-  int nextGeneCounter = 0; //determines if nextGene should be incremented
+  int nextGeneCounter = 0;
   List<Vector2> dna;
-  double fitness; //rocket's fitness
+  double fitness;
   bool completed = false;
   bool crashed = false;
   double closestDistance =
@@ -23,7 +23,6 @@ class Rocket implements Comparable<Rocket> {
   double mutationRate = 0.01;
   double crossoverRate = 0.99;
 
-  //create new rocket
   Rocket(double x, double y, List<Vector2> dna) {
     pos = new Vector2(x, y);
     vel = new Vector2(0.0, -.5); //start rocket with upwards velocity
@@ -34,7 +33,6 @@ class Rocket implements Comparable<Rocket> {
     if (dna == null) {
       this.dna = new List<Vector2>(numGenes);
       for (int i = 0; i < numGenes; i++) {
-        //set each gene to a random set of values
         this.dna[i] = randomGene();
       }
     } else {
@@ -69,12 +67,13 @@ class Rocket implements Comparable<Rocket> {
     }
 
     if (!completed && !crashed) {
-      acc.setFrom(dna.elementAt(curGene)); //set acceleration based on gene
-      acc.add(grav); //add gravity to acceleration vector
-      vel.add(acc); //add acceleration to velocity vector
+      acc.setFrom(dna.elementAt(curGene));
+      acc.add(grav);
+      vel.add(acc);
+
       if (vel.length > 7.5)
         vel = vel.normalized() * 7.5; //max velocity of rocket
-      pos.add(vel); //add velocity to position vector
+      pos.add(vel);
 
       //check if collided with obstacles
       Point point = new Point(pos.x, pos.y);
