@@ -166,8 +166,3 @@ draw(num delta) {
 
   window.animationFrame.then(draw);
 }
-
-
-
-
-
