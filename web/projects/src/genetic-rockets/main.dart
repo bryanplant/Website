@@ -16,6 +16,11 @@ HtmlElement nameHeader;
 HtmlElement infoHeader;
 List<Rectangle> obstacles;
 
+//Generation stats
+HtmlElement genNumber;
+HtmlElement maxFitness;
+HtmlElement averageFitness;
+
 StarPopulation stars;
 RocketPopulation rockets;
 
@@ -38,6 +43,10 @@ void init() {
   speedSlider = querySelector('#slider');
   nameHeader = querySelector('#name');
   infoHeader = querySelector('#info');
+
+  genNumber = querySelector('#genNumber');
+  maxFitness = querySelector('#maxFitness');
+  averageFitness = querySelector('#averageFitness');
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -153,16 +162,9 @@ draw(num delta) {
 
   rockets.draw(c2d);
 
-  //draw text info about population
-  c2d.font = "10pt sans-serif";
-  c2d.fillStyle = 'white';
-  c2d.textAlign = 'left';
-  c2d.fillText("Generation Number: " + rockets.genNum.toString(), 20,
-      window.innerHeight - 60);
-  c2d.fillText("Max Fitness of Last Generation:        " +
-      rockets.maxFit.toStringAsFixed(4), 20, window.innerHeight - 40);
-  c2d.fillText("Average Fitness of Last Generation: " +
-      rockets.averageFit.toStringAsFixed(4), 20, window.innerHeight - 20);
+  genNumber.text = "Generation Number: " + rockets.genNum.toString();
+  maxFitness.text = "Max Fitness: " + rockets.maxFit.toStringAsFixed(2);
+  averageFitness.text = "Average Fitness: " + rockets.averageFit.toStringAsFixed(2);
 
   window.animationFrame.then(draw);
 }

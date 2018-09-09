@@ -26,13 +26,26 @@ a:link, a:visited {
     color: white;
 }
 
+#generationDiv {
+    bottom: 20px;
+    left: 20px;
+    padding: 5px 20px 5px 20px;
+    position: absolute;
+    display: table;
+    text-align: left;
+    font-size: 10pt;
+    color: white;
+    background-color: rgba(44,44,44, 0.75);
+    font-family: Open Sans, sans-serif;
+}
+
 #sliderDiv {
     margin-left: 10px;
     margin-top: 10px;
     padding: 5px;
     position: absolute;
     display: table;
-    background-color: #696969;
+    background-color: rgba(44,44,44, 0.75);
     width: 200px;
     text-align: center;
 }

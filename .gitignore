@@ -1,5 +1,6 @@
 .dart_tool/
 .idea/
+.firebase/
 build/
 .pub/
 .packages
