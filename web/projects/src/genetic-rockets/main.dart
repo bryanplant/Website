@@ -47,14 +47,15 @@ void init() {
   stars = new StarPopulation(20);
   rockets = new RocketPopulation(50);
 
-  obstacles = [new Rectangle(
+  obstacles = [
+    new Rectangle(
       nameHeader.parent.offsetLeft + nameHeader.offsetLeft,
       nameHeader.parent.offsetTop + nameHeader.offsetTop,
       nameHeader.clientWidth, nameHeader.clientHeight),
-  new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
+    new Rectangle(infoHeader.parent.offsetLeft + infoHeader.offsetLeft,
       infoHeader.parent.offsetTop + infoHeader.offsetTop,
       infoHeader.clientWidth, infoHeader.clientHeight),
-  new Rectangle(navBarHeader.parent.offsetLeft + navBarHeader.offsetLeft,
+    new Rectangle(navBarHeader.parent.offsetLeft + navBarHeader.offsetLeft,
       navBarHeader.parent.offsetTop + navBarHeader.offsetTop,
       navBarHeader.clientWidth, navBarHeader.clientHeight)
   ];

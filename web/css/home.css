@@ -1,10 +1,16 @@
 body {
-    background: url("../resources/background.jpg") no-repeat center;
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.45),
+            rgba(0, 0, 0, 0.35)
+        ),
+        url("../resources/background.jpg"),rgba(0,0,0,0.25);
     background-size: cover;
 }
 
 #wrapper {
-    background-color: rgba(0, 0, 0, 0.65)
+    margin-right: auto;
+    margin-left:  auto;
 }
 
 #info {

@@ -15,22 +15,15 @@ body {
     margin-bottom: 10px;
 }
 
-#navigation {
-    top: 25%;
-    position: absolute;
+#infoDiv {
+    position: relative;
+    text-align: center;
+    width: 100%;
+    top: 30%;
 }
 
 a:link, a:visited {
     color: white;
-}
-
-#about {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding-bottom: 20px;
-    padding-right: 20px;
-    margin: 0;
 }
 
 #sliderDiv {
