@@ -1,30 +1,42 @@
 import 'dart:html';
 import 'dart:math';
-import 'package:vector_math/vector_math.dart';
+import 'vector2.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Rocket implements Comparable<Rocket> {
-  Random rand = new Random();
+part 'rocket.g.dart';
+
+@JsonSerializable()
+
+class Rocket extends Object with _$RocketSerializerMixin implements Comparable<Rocket> {
   Vector2 pos;
   Vector2 vel;
   Vector2 acc;
   Vector2 grav;
   int width, height;
-  int numGenes = 100;
-  int curGene = 0;
-  int nextGeneTime = 3;
-  int nextGeneCounter = 0;
+  int numGenes;
+  int curGene;
+  int nextGeneTime;
+  int nextGeneCounter;
   List<Vector2> dna;
   double fitness;
-  bool completed = false;
-  bool crashed = false;
-  double closestDistance =
-      double.maxFinite; //closest distance to goal during iteration
+  bool completed;
+  bool crashed;
+  double closestDistance; //closest distance to goal during iteration
   double completedTime;
-  double mutationRate = 0.01;
-  double crossoverRate = 0.99;
+  double mutationRate;
+  double crossoverRate;
 
-  Rocket(double x, double y, List<Vector2> dna) {
-    pos = new Vector2(x, y);
+  Rocket(List<Vector2> dna) {
+    curGene = 0;
+    numGenes = 100;
+    nextGeneTime = 3;
+    nextGeneCounter = 0;
+    completed = false;
+    crashed = false;
+    closestDistance = double.maxFinite;
+    mutationRate = 0.01;
+    crossoverRate = 0.99;
+    pos = new Vector2(window.innerWidth / 2, window.innerHeight - 50.toDouble());
     vel = new Vector2(0.0, -.5); //start rocket with upwards velocity
     acc = new Vector2(0.0, 0.0);
     grav = new Vector2(0.0, 0.025);
@@ -39,6 +51,8 @@ class Rocket implements Comparable<Rocket> {
       this.dna = dna;
     }
   }
+
+  factory Rocket.fromJson(Map<String, dynamic> json) => _$RocketFromJson(json);
 
   //calculate rocket's fitness based on distance to target
   void calculateFitness(Vector2 target) {
@@ -62,7 +76,7 @@ class Rocket implements Comparable<Rocket> {
     if (!completed && pos.distanceTo(target) < targetRadius) {
       completed = true;
       completedTime = curGene + 1 / ((nextGeneTime + 1) - nextGeneCounter);
-      pos = target.clone();
+      pos.setFrom(target);
       closestDistance = 0.0;
     }
 
@@ -72,7 +86,7 @@ class Rocket implements Comparable<Rocket> {
       vel.add(acc);
 
       if (vel.length > 7.5)
-        vel = vel.normalized() * 7.5; //max velocity of rocket
+        vel = vel.normalized()..scale(7.5); //max velocity of rocket
       pos.add(vel);
 
       //check if collided with obstacles
@@ -142,6 +156,7 @@ class Rocket implements Comparable<Rocket> {
   }
 
   Vector2 randomGene() {
+    Random rand = new Random();
     return new Vector2((rand.nextDouble() - .5), (rand.nextDouble() - .5));
   }
 

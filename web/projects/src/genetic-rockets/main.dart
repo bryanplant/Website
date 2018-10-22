@@ -3,7 +3,7 @@ import 'star_population.dart';
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
-import 'package:vector_math/vector_math.dart';
+import 'vector2.dart';
 
 
 Random rand;

@@ -1,8 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'rocket.dart';
 import 'dart:html';
+import 'package:http/browser_client.dart';
 
 import 'dart:math';
-import 'package:vector_math/vector_math.dart';
+import 'vector2.dart';
 
 class RocketPopulation {
   Random rand = new Random();
@@ -12,6 +16,7 @@ class RocketPopulation {
   double maxFit = 0.0;
   double averageFit = 0.0;
   bool allDone;
+  bool generating = false;
 
   RocketPopulation(int size) {
     this.size = size;
@@ -34,7 +39,7 @@ class RocketPopulation {
     if (rockets[0].curGene == rockets[0].numGenes - 1)
       allDone = true;
 
-    if (allDone) {
+    if (allDone && !generating) {
       newGeneration(target);
     }
   }
@@ -45,22 +50,37 @@ class RocketPopulation {
     }
   }
 
-  void newGeneration([Vector2 target]) {
+  Future newGeneration([Vector2 target]) async {
     genNum++;
     if (rockets.length == 0) {
       for (int i = 0; i < size; i ++) {
-        rockets.add(new Rocket(
-            window.innerWidth / 2, window.innerHeight - 50.toDouble(), null));
+        rockets.add(new Rocket(null));
       }
     }
     else {
       calcFitness(target);
 
-      List<Rocket> parents = select();
-      List<Rocket> offspring = uniformCrossover(parents);
-      List<Rocket> newGen = mutate(offspring);
+      generating = true;
+      var client = new BrowserClient();
+      var url = 'http://35.227.169.21';
+      var data = json.encode(rockets);
+    
+      var response = await client.post(url, body: data);
+      generating = false;
+      print("Response code: " + response.statusCode.toString());
+      
+      rockets = new List<Rocket>();
+      for (Map rocketMap in json.decode(response.body)) {
+        rockets.add(Rocket.fromJson(rocketMap));
+      }
+      print(rockets[0].pos.x);
+      print(rockets[0].pos.y);
 
-      rockets = newGen;
+      // List<Rocket> parents = select();
+      // List<Rocket> offspring = uniformCrossover(parents);
+      // List<Rocket> newGen = mutate(offspring);
+
+      // rockets = newGen;
     }
   }
 
@@ -131,10 +151,8 @@ class RocketPopulation {
         dna2 = parent2.dna;
       }
 
-      offspring.add(new Rocket(
-          window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
-      offspring.add(new Rocket(
-          window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
+      offspring.add(new Rocket(dna1));
+      offspring.add(new Rocket(dna2));
       parents.remove(parent1);
       parents.remove(parent2);
     }
@@ -168,10 +186,8 @@ class RocketPopulation {
         dna2 = parent2.dna;
       }
 
-      offspring.add(new Rocket(
-          window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna1));
-      offspring.add(new Rocket(
-          window.innerWidth / 2, window.innerHeight - 50.toDouble(), dna2));
+      offspring.add(new Rocket(dna1));
+      offspring.add(new Rocket(dna2));
       parents.remove(parent1);
       parents.remove(parent2);
     }
