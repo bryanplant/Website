@@ -20,6 +20,7 @@ List<Rectangle> obstacles;
 HtmlElement genNumber;
 HtmlElement maxFitness;
 HtmlElement averageFitness;
+HtmlElement onlineStatus;
 
 StarPopulation stars;
 RocketPopulation rockets;
@@ -47,6 +48,7 @@ void init() {
   genNumber = querySelector('#genNumber');
   maxFitness = querySelector('#maxFitness');
   averageFitness = querySelector('#averageFitness');
+  onlineStatus = querySelector('#online');
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -165,6 +167,8 @@ draw(num delta) {
   genNumber.text = "Generation Number: " + rockets.genNum.toString();
   maxFitness.text = "Max Fitness: " + rockets.maxFit.toStringAsFixed(2);
   averageFitness.text = "Average Fitness: " + rockets.averageFit.toStringAsFixed(2);
+  onlineStatus.style.color = rockets.online ? "green" : "red";
+  onlineStatus.text = rockets.online ? "SERVER ONLINE" : "SERVER OFFLINE";
 
   window.animationFrame.then(draw);
 }

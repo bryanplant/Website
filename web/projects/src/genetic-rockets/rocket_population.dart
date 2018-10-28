@@ -17,6 +17,7 @@ class RocketPopulation {
   double averageFit = 0.0;
   bool allDone;
   bool generating = false;
+  bool online = true;
 
   RocketPopulation(int size) {
     this.size = size;
@@ -61,27 +62,44 @@ class RocketPopulation {
       calcFitness(target);
 
       generating = true;
-      var client = new BrowserClient();
-      var url = 'http://35.227.169.21';
-      var data = json.encode(rockets);
-    
-      var response = await client.post(url, body: data);
+      // server call to generate a new generation
+      online = await newGenerationServer();
+
+      if(!online) {
+        // generate new generation locally
+        newGenerationLocal();
+      }
       generating = false;
-      print("Response code: " + response.statusCode.toString());
-      
+    }
+  }
+
+  Future<bool> newGenerationServer() async {
+    var client = new BrowserClient();
+    var url = 'http://35.227.169.21/';
+    var data = json.encode(rockets);
+    var response = null;
+    try{
+      response = await client.post(url, body: data);
+      print("got response");
+    }
+    catch (e) {
+      return false;
+    }
+    if (response != null && response.statusCode == 200) {
       rockets = new List<Rocket>();
       for (Map rocketMap in json.decode(response.body)) {
         rockets.add(Rocket.fromJson(rocketMap));
       }
-      print(rockets[0].pos.x);
-      print(rockets[0].pos.y);
-
-      // List<Rocket> parents = select();
-      // List<Rocket> offspring = uniformCrossover(parents);
-      // List<Rocket> newGen = mutate(offspring);
-
-      // rockets = newGen;
     }
+    return (response != null);
+  }
+
+  void newGenerationLocal() {
+    List<Rocket> parents = select();
+    List<Rocket> offspring = uniformCrossover(parents);
+    List<Rocket> newGen = mutate(offspring);
+
+    rockets = newGen;
   }
 
   void calcFitness(Vector2 target) {
