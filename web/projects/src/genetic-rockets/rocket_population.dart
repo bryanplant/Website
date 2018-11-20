@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'rocket.dart';
 import 'dart:html';
-import 'package:http/browser_client.dart';
 
 import 'dart:math';
 import 'vector2.dart';
+import 'package:http/browser_client.dart';
 
 class RocketPopulation {
   Random rand = new Random();
@@ -74,17 +74,17 @@ class RocketPopulation {
   }
 
   Future<bool> newGenerationServer() async {
+    var url = 'https://us-central1-project-885b4.cloudfunctions.net/function-1';
+    var data = json.encode(this.rockets);
+    var response;
     var client = new BrowserClient();
-    var url = 'http://35.227.169.21/';
-    var data = json.encode(rockets);
-    var response = null;
     try{
       response = await client.post(url, body: data);
-      print("got response");
     }
     catch (e) {
       return false;
     }
+
     if (response != null && response.statusCode == 200) {
       rockets = new List<Rocket>();
       for (Map rocketMap in json.decode(response.body)) {
