@@ -4,7 +4,6 @@ import 'dart:math';
 part 'vector2.g.dart';
 
 @JsonSerializable()
-
 class Vector2 extends Object with _$Vector2SerializerMixin {
   double x;
   double y;
@@ -14,7 +13,8 @@ class Vector2 extends Object with _$Vector2SerializerMixin {
     this.y = y;
   }
 
-  factory Vector2.fromJson(Map<String, dynamic> json) => _$Vector2FromJson(json);
+  factory Vector2.fromJson(Map<String, dynamic> json) =>
+      _$Vector2FromJson(json);
 
   double get length => distanceTo(Vector2(0.0, 0.0));
 
@@ -30,7 +30,7 @@ class Vector2 extends Object with _$Vector2SerializerMixin {
     return sqrt(dx * dx + dy * dy);
   }
 
-  double setFrom(Vector2 other) {
+  void setFrom(Vector2 other) {
     x = other.x;
     y = other.y;
   }
@@ -41,7 +41,7 @@ class Vector2 extends Object with _$Vector2SerializerMixin {
       return Vector2(0.0, 0.0);
     }
     double d = 1.0 / length;
-    return Vector2(x*d, y*d);
+    return Vector2(x * d, y * d);
   }
 
   void scale(double factor) {

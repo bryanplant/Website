@@ -1,0 +1,5 @@
+webdev serve
+webdev build -o web:build
+
+firebase serve
+firebase deploy
